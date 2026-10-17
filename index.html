@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apuntes ASIR · Pablo Conde</title>
+<style>
+:root{
+  --bg:#faf8f7;--sf:#ffffff;--tx:#14171c;--mu:#5b6470;--bd:#dfe3e8;--sh:0 1px 2px rgba(20,23,28,.06);
+  color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+:root[data-theme="dark"]{--bg:#0f1217;--sf:#171b22;--tx:#eceff3;--mu:#99a3b0;--bd:#2a313b;--sh:none;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.top{display:flex;justify-content:flex-end;padding:14px 18px}
+#th{background:var(--sf);color:var(--mu);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer;transition:color .15s,border-color .15s}
+#th:hover{color:var(--tx);border-color:var(--mu)}
+main{max-width:600px;margin:0 auto;padding:clamp(24px,8vh,80px) 20px 64px}
+header{text-align:center;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--bd)}
+h1{margin:0;font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:700;font-size:clamp(2rem,7vw,3.1rem);line-height:1.1;letter-spacing:.03em}
+.sub{margin:10px 0 0;color:var(--mu);font-size:1.05rem}
+.view{animation:in .22s ease-out}
+.view[hidden]{display:none}
+@keyframes in{from{opacity:0}to{opacity:1}}
+.label{margin:0 0 14px;font-size:.95rem;color:var(--mu)}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{--k:var(--c);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 16px 20px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-left:6px solid var(--k);border-radius:8px;box-shadow:var(--sh);text-decoration:none;font-weight:600;font-size:1.02rem;transition:background .15s,border-color .15s,transform .15s}
+:root[data-theme="dark"] .item{--k:var(--cd)}
+.item svg{flex:none;width:18px;height:18px;color:var(--mu);transition:transform .15s,color .15s}
+.item:hover{background:color-mix(in srgb,var(--k) 9%,var(--sf));border-color:var(--k);transform:translateX(2px)}
+.item:hover svg{transform:translateX(3px);color:var(--k)}
+.item.off{background:transparent;box-shadow:none;border-style:dashed;border-left-style:solid;border-left-color:var(--bd);color:var(--mu);font-weight:500;pointer-events:none}
+.item.off span+span{font-size:.82rem;font-weight:400}
+a:focus-visible,button:focus-visible{outline:2px solid var(--tx);outline-offset:3px}
+h2{margin:0;font-size:clamp(1.5rem,5vw,2rem);line-height:1.2;font-weight:700}
+.rule{width:48px;height:4px;border-radius:2px;background:var(--c);margin:12px 0 22px}
+:root[data-theme="dark"] .rule{background:var(--cd)}
+.back{display:inline-block;margin-top:28px;color:var(--mu);text-decoration:none;font-size:.95rem}
+.back:hover{color:var(--tx);text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){.view{animation:none}.item,.item svg{transition:none}}
+</style>
+</head>
+<body>
+<div class="top"><button id="th" type="button" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button></div>
+<main>
+  <section class="view" id="home">
+    <header>
+      <h1>APUNTES ASIR</h1>
+      <p class="sub">Pablo Conde</p>
+    </header>
+    <p class="label">Asignaturas</p>
+    <nav class="list" id="subjects" aria-label="Asignaturas"></nav>
+  </section>
+  <section class="view" id="subject" hidden>
+    <h2 id="sname"></h2>
+    <div class="rule"></div>
+    <p class="label">Elige los apuntes</p>
+    <nav class="list" id="exams" aria-label="Exámenes"></nav>
+    <a class="back" href="#" id="bk">← Volver a las asignaturas</a>
+  </section>
+</main>
+<script>
+/* ===== CONFIGURACIÓN =====
+   c = color en modo claro, cd = color en modo oscuro.
+   href:null = "Próximamente". Para añadir apuntes pon la ruta del HTML (sin espacios ni tildes). */
+const SUBJECTS=[
+  {id:'seguridad',n:'Seguridad',c:'#b3261e',cd:'#ff7066',exams:[
+    {n:'Examen 1',href:'seguridad/examen-1.html'},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
+  {id:'redes',n:'Redes',c:'#d9640a',cd:'#ff9a4d',exams:[
+    {n:'Examen 1',href:null},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
+  {id:'python',n:'Python',c:'#1e5b34',cd:'#5fd085',exams:[
+    {n:'Examen 1',href:null},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
+  {id:'aso',n:'Administración de Sistemas Operativos',c:'#1a5fb4',cd:'#6aa6ff',exams:[
+    {n:'Examen 1',href:null},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
+  {id:'bbdd',n:'Bases de Datos',c:'#e0b000',cd:'#f2c200',exams:[
+    {n:'Examen 1',href:null},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]}
+];
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const CH='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>';
+const sty=s=>`style="--c:${s.c};--cd:${s.cd}"`;
+$('#subjects').innerHTML=SUBJECTS.map(s=>`<a class="item" ${sty(s)} href="#${s.id}"><span>${esc(s.n)}</span>${CH}</a>`).join('');
+function route(){
+  const s=SUBJECTS.find(x=>x.id===location.hash.slice(1));
+  $('#home').hidden=!!s;$('#subject').hidden=!s;
+  if(!s){document.title='Apuntes ASIR · Pablo Conde';return}
+  document.title=s.n+' · Apuntes ASIR';
+  $('#subject').style.setProperty('--c',s.c);$('#subject').style.setProperty('--cd',s.cd);
+  $('#sname').textContent=s.n;
+  $('#exams').innerHTML=s.exams.map(e=>e.href
+    ?`<a class="item" ${sty(s)} href="${e.href}"><span>${esc(e.n)}</span>${CH}</a>`
+    :`<div class="item off" aria-disabled="true"><span>${esc(e.n)}</span><span>Próximamente</span></div>`).join('');
+  window.scrollTo(0,0);
+}
+addEventListener('hashchange',route);
+const root=document.documentElement,tb=$('#th');
+function setTheme(t,store){root.dataset.theme=t;tb.textContent=t==='dark'?'Modo claro':'Modo oscuro';if(store){try{localStorage.setItem('asir_theme',t)}catch(e){}}}
+let saved=null;try{saved=localStorage.getItem('asir_theme')}catch(e){}
+setTheme(saved==='dark'?'dark':'light',false);
+tb.onclick=()=>setTheme(root.dataset.theme==='dark'?'light':'dark',true);
+route();
+</script>
+</body>
+</html>
