@@ -108,11 +108,10 @@ function route(){
   document.title=s.n+' · Apuntes ASIR';
   const sub=$('#subject');sub.style.setProperty('--c',s.c);sub.style.setProperty('--cd',s.cd);
   $('#sname').textContent=s.n;
-  $('#exams').innerHTML=s.exams.map((e,i)=>{
+  $('#exams').innerHTML=s.exams.filter(e => e.href).map((e,i)=>{
     const num=`<span class="chip"><span class="num">${String(i+1).padStart(2,'0')}</span></span>`;
-    return e.href
-      ?`<a class="tile" ${sty(s)} href="${e.href}">${num}<span class="name">${esc(e.n)}</span></a>`
-      :`<div class="tile off" aria-disabled="true">${num}<span class="name">${esc(e.n)}<span class="hint">Próximamente</span></span></div>`}).join('');
+    return `<a class="tile" ${sty(s)} href="${e.href}">${num}<span class="name">${esc(e.n)}</span></a>`;
+  }).join('');
   window.scrollTo(0,0);
 }
 addEventListener('hashchange',route);
