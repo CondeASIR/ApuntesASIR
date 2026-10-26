@@ -32,12 +32,10 @@ h1{margin:0;font-size:clamp(1.7rem,6.4vw,2.6rem);line-height:1.15;font-weight:70
 .chip svg{width:28px;height:28px}
 .chip .num{font-size:1.7rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
 .name{font-size:.92rem;font-weight:600;line-height:1.3}
-.hint{display:block;margin-top:2px;font-size:.75rem;font-weight:400;color:var(--mu)}
 .tile:hover{border-color:var(--k);transform:translateY(-2px)}
 .tile:hover .chip{background:var(--k);color:var(--on,var(--sf))}
 .tile:active{transform:translateY(0)}
-.tile.off{background:transparent;border-style:dashed;pointer-events:none;opacity:.6}
-.tile.off .chip{background:transparent;color:var(--mu);border:1px dashed var(--bd)}
+.empty{grid-column:1/-1;margin:0;text-align:center;color:var(--mu);font-size:.9rem}
 a:focus-visible,button:focus-visible{outline:2px solid var(--tx);outline-offset:3px}
 h2{margin:0;text-align:center;font-size:clamp(1.2rem,4.4vw,1.6rem);line-height:1.3;font-weight:700}
 .sline{display:flex;justify-content:center;margin:14px 0 32px}
@@ -71,7 +69,7 @@ h2{margin:0;text-align:center;font-size:clamp(1.2rem,4.4vw,1.6rem);line-height:1
 <script>
 /* ===== CONFIGURACIÓN =====
    c = color en claro, cd = color en oscuro, g = glifo SVG, short = etiqueta corta.
-   href:null = "Próximamente". Para añadir apuntes pon la ruta del HTML (sin espacios ni tildes). */
+   href:null = el examen no se muestra. Para añadir apuntes pon la ruta del HTML (sin espacios ni tildes). */
 const G={
   shield:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
   net:'<circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v5M12 12l-6 5M12 12l6 5"/>',
@@ -87,7 +85,8 @@ const SUBJECTS=[
     {n:'Examen 1',href:'seguridad/examen-1.html'},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
   {id:'redes',n:'Redes',short:'Redes',g:'net',c:'#d9640a',cd:'#ff9a4d',exams:ex3()},
   {id:'python',n:'Python',short:'Python',g:'code',c:'#1e5b34',cd:'#5fd085',exams:ex3()},
-  {id:'aso',n:'Administración de Sistemas Operativos',short:'ASO',g:'term',c:'#1a5fb4',cd:'#6aa6ff',exams:ex3()},
+  {id:'aso',n:'Administración de Sistemas Operativos',short:'ASO',g:'term',c:'#1a5fb4',cd:'#6aa6ff',exams:[
+    {n:'Examen 1',href:'aso/examen-1.html'},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
   {id:'bbdd',n:'Bases de Datos',short:'Bases de Datos',g:'db',c:'#d4a200',cd:'#f2c200',exams:[
     {n:'Examen 1',href:'bbdd/examen-1.html'},{n:'Examen 2',href:null},{n:'Examen 3',href:null}]},
   {id:'web',n:'Aplicaciones Web',short:'Aplicaciones Web',g:'globe',c:'#2f9a4c',cd:'#9be28f',on:'#161616',exams:[
@@ -108,10 +107,11 @@ function route(){
   document.title=s.n+' · Apuntes ASIR';
   const sub=$('#subject');sub.style.setProperty('--c',s.c);sub.style.setProperty('--cd',s.cd);
   $('#sname').textContent=s.n;
-  $('#exams').innerHTML=s.exams.filter(e => e.href).map((e,i)=>{
+  const list=s.exams.map((e,i)=>({e,i})).filter(x=>x.e.href);
+  $('#exams').innerHTML=list.length?list.map(({e,i})=>{
     const num=`<span class="chip"><span class="num">${String(i+1).padStart(2,'0')}</span></span>`;
-    return `<a class="tile" ${sty(s)} href="${e.href}">${num}<span class="name">${esc(e.n)}</span></a>`;
-  }).join('');
+    return `<a class="tile" ${sty(s)} href="${e.href}">${num}<span class="name">${esc(e.n)}</span></a>`}).join('')
+    :'<p class="empty">Aún no hay apuntes de esta asignatura.</p>';
   window.scrollTo(0,0);
 }
 addEventListener('hashchange',route);
