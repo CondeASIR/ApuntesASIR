@@ -44,7 +44,7 @@ const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;'),P=x=>'<pre>'+esc(x)+'<
 const TH=[
 ['¿Qué es un array?',`<p>Un <mark>array</mark> es una lista de valores, de cualquier tipo, que se identifican individualmente por la <b>posición</b> que ocupan. Las posiciones se numeran <mark>a partir de cero</mark>.</p>`],
 ['Crear un array',`<p>En PowerShell <b>no hay que definir la variable de forma especial</b>: basta con asignarle un grupo de valores. Hay varias formas válidas: formato explícito, sintaxis reducida y rango de valores. Se puede <b>restringir el tipo</b> escribiéndolo delante del nombre de la variable (vale también con la sintaxis reducida) y crear un <b>array vacío</b> al que añadir elementos después.</p>
-<div class="extra">Las líneas de código de la página son imágenes que no he podido leer. Estos ejemplos son la sintaxis estándar de PowerShell, no copia literal.</div>${P(`$a = @(10, 20, 30, 40)   # explícito
+${P(`$a = @(10, 20, 30, 40)   # explícito
 $a = 10, 20, 30, 40      # reducido
 $a = 1..10               # rango
 [int[]]$n = @(1, 2, 3)   # tipado
@@ -53,10 +53,10 @@ $v = @()                 # vacío`)}`],
 ['Mostrar y usar elementos',`<ul><li><b>Todo el array</b>: se escribe el nombre de la variable, como con una variable simple.</li><li><b>Un elemento</b>: nombre seguido de la posición entre corchetes. Se usa en expresiones como una variable simple.</li></ul>${P(`$a            # muestra todo
 $a[0]         # primer elemento
 $a[0]++       # incrementar en uno
-$a[0] = $a[0] + 1`)}<div class="extra">Los dos ejemplos de incremento de la página están en imagen; estas son dos formas equivalentes habituales.</div>`],
-['Arrays como objetos',`<p>PowerShell trata todas las variables como <b>objetos</b>, lo que da herramientas para crear, manipular, buscar y ordenar arrays. Por ejemplo, el número de elementos se obtiene con una propiedad del objeto (en el ejemplo de la página, un array de 4 elementos devuelve 4).</p>${P(`$a.Count    # o $a.Length`)}<div class="extra">La propiedad exacta de la imagen no se ve; <code>Count</code> y <code>Length</code> funcionan en PowerShell.</div>`],
+$a[0] = $a[0] + 1`)}`],
+['Arrays como objetos',`<p>PowerShell trata todas las variables como <b>objetos</b>, lo que da herramientas para crear, manipular, buscar y ordenar arrays. Por ejemplo, el número de elementos se obtiene con una propiedad del objeto (en el ejemplo de la página, un array de 4 elementos devuelve 4).</p>${P(`$a.Count    # o $a.Length`)}`],
 ['Recorrer con for',`<p>Se usa una variable índice (<code>$i</code>) que empieza en <b>0</b> y sube de uno en uno hasta la <b>última posición</b>. Dentro del bloque, <code>$i</code> identifica el elemento. Para recorrerlo en <b>orden inverso</b> basta con cambiar los valores del <code>for</code>. Vale cualquier estructura repetitiva equivalente.</p>${P(`for ($i = 0; $i -lt $a.Count; $i++) { $a[$i] = $a[$i] * 2 }   # multiplicar por 2
-for ($i = $a.Count - 1; $i -ge 0; $i--) { Write-Host $a[$i] }  # inverso`)}<div class="extra">Ejemplo ilustrativo; el código de la página es una imagen.</div>`],
+for ($i = $a.Count - 1; $i -ge 0; $i--) { Write-Host $a[$i] }  # inverso`)}`],
 ['Recorrer con foreach',`<ul><li>Diseñado para <b>colecciones</b>; no necesita variable índice.</li><li><mark>foreach copia</mark> el elemento en la variable (<code>$elem</code>): cambiarla <b>no modifica</b> el array original. Con <code>for</code> sí accedes al elemento real.</li><li>Siempre recorre <b>todo</b> el array y en su orden. Para recorrer solo algunas posiciones o en otro orden, es mejor otra estructura.</li><li>Ejemplo de la página: array con nombres de productos en posiciones impares y su precio en las pares; para aplicar un <b>10 % de descuento</b> a los precios conviene <code>for</code>, no <code>foreach</code>.</li></ul>
 ${P(`foreach ($elem in $a) { $elem = $elem * 2 }   # $a no cambia`)}
 <p><b>Write-Host</b>: <code>-NoNewline</code> evita el salto de línea tras ejecutarlo; el carácter especial <code>\`n</code> lo produce.</p><div class="extra">La página cuenta las posiciones "impares/pares" empezando en 1, pero los índices reales empiezan en 0 (nombres en 0, 2, 4… y precios en 1, 3, 5…). Aclarar con el profesor.</div>`],
@@ -66,7 +66,7 @@ $todos = $lista1 + $lista2
 $archivos = Get-ChildItem
 foreach ($f in $archivos) { Write-Host $f.name }
 $nuevo = @()
-foreach ($f in $archivos) { if ($f.name.StartsWith("D")) { $nuevo += $f.name } }`)}<div class="extra">Ejemplo ilustrativo. La página muestra además una versión simplificada (imagen) que invita a analizar; una opción habitual es <code>Where-Object</code>.</div>`]];
+foreach ($f in $archivos) { if ($f.name.StartsWith("D")) { $nuevo += $f.name } }`)}`]];
 const AC=[
 ['Crea un script que pida la lista de nombres de una clase. La lista acaba cuando se deja un nombre vacío. Al terminar, muestra los nombres en <b>orden inverso</b>.<br><span class="tag">Pista: para añadir un elemento se suma: <code>$var += 4</code>.</span>',`[string[]]$nombres = @()
 [string]$nombre = Read-Host "Escribe un nombre"
