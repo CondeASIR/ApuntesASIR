@@ -82,7 +82,16 @@ m.innerHTML=`<h3>Preguntas falladas (${w.length})</h3>`+(w.length?`<button class
 function gl(m){m.innerHTML='<input type="search" id="gq" placeholder="Buscar término…" aria-label="Buscar en el glosario"><div id="gr"></div>';const f=()=>{const q=$('#gq').value.toLowerCase();$('#gr').innerHTML=T.flatMap(t=>t.c.map(c=>[t.n,c[0],c[1]])).filter(c=>(c[1]+c[2]).toLowerCase().includes(q)).map(c=>`<div class="card"><b>${c[1]}</b> <span class="tag">${c[0]}</span><br>${c[2]}</div>`).join('')};$('#gq').oninput=f;f()}
 function ff(m){m.insertAdjacentHTML('beforeend','<p class="tag">Texto íntegro de los apuntes de mi queridísimo FLAVIUS (los .md), sin resumir.</p>');tops().forEach(t=>m.insertAdjacentHTML('beforeend',`<h2>${t.n}</h2><div class="md">${FF[t.id]}</div>`))}
 function ch(m){tops().forEach(t=>m.insertAdjacentHTML('beforeend',`<div class="card"><h3>${t.n}</h3><ul>${t.s.map(x=>`<li>${x}</li>`).join('')}</ul></div>`))}
-$('#th').onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark'};
+(function(){
+  const r=document.documentElement;
+  let t=null;try{t=localStorage.getItem('asir_theme')}catch(e){}
+  r.dataset.theme=t==='dark'?'dark':'light';
+  $('#th').onclick=()=>{
+    const n=r.dataset.theme==='dark'?'light':'dark';
+    r.dataset.theme=n;
+    try{localStorage.setItem('asir_theme',n)}catch(e){}
+  };
+})();
 $('#rs').onclick=()=>{if(confirm('¿Borrar todo el progreso?')){S={done:{},known:{},wrong:{},best:{}};save();R()}};
 R();
 </script></body></html>
