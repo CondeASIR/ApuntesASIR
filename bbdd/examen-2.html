@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bases de Datos · Examen 2</title>
+<style>
+:root{--bg:#faf8f7;--sf:#fff;--tx:#241a19;--mu:#6b5d5b;--bd:#e6dcda;--ac:#ffc400;--acs:#fbf1cc;--ok:#1b7a3a;--oks:#e3f4e8;--ko:#b3261e;--kos:#fde7e5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#0f1217;--sf:#171b22;--tx:#eceff3;--mu:#99a3b0;--bd:#2a313b;--ac:#f2c200;--acs:#3a3010;--ok:#5fd085;--oks:#16301e;--ko:#ff7066;--kos:#3a1f1d;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--bd);padding:8px 14px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+h1{font-size:1.05rem;margin:0;flex:1;color:var(--ac)}
+button{font:inherit;color:inherit;background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--ac)}button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.pb{height:6px;background:var(--bd);border-radius:4px;margin:8px 0 2px;overflow:hidden}.pb i{display:block;height:100%;background:var(--ac);transition:width .4s}
+nav{overflow-x:auto;white-space:nowrap;padding-bottom:2px}nav button{margin-right:4px}
+main{max-width:820px;margin:0 auto;padding:14px}
+main.wide{max-width:none;padding-left:6px;padding-right:6px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:10px 0}
+details{background:var(--sf);border:1px solid var(--bd);border-radius:10px;margin:8px 0;padding:2px 14px}
+summary{cursor:pointer;font-weight:600;padding:10px 0}details[open] summary{color:var(--ac)}
+details>div{padding-bottom:10px}
+.extra{border-left:4px solid #d19a00;background:rgba(209,154,0,.12);padding:8px 12px;border-radius:6px;margin:8px 0}.extra::before{content:"Nota extra · ";font-weight:700;color:#b07d00}
+mark{background:var(--acs);color:inherit;padding:0 3px;border-radius:3px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--bd);padding:5px 8px;text-align:left}th{background:var(--acs)}.sc{overflow-x:auto}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}.opt.ok{background:var(--oks);border-color:var(--ok)}.opt.ko{background:var(--kos);border-color:var(--ko);animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fc{min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.1rem;cursor:pointer;perspective:600px}
+.fc.back{background:var(--acs);border-color:var(--ac)}
+.tag{font-size:.75rem;color:var(--mu)}input[type=text],input[type=search],input[type=number],textarea{width:100%;font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);color:var(--tx)}
+.fb{padding:8px 12px;border-radius:8px;margin-top:8px}.fb.ok{background:var(--oks)}.fb.ko{background:var(--kos)}
+.big{font-size:2rem;font-weight:700;color:var(--ac)}
+.md{line-height:1.65}.md h1{font-size:1.4rem;margin:1.6em 0 .5em;flex:none}.md h2{font-size:1.2rem;margin:1.4em 0 .4em}.md h3{font-size:1.05rem;margin:1.2em 0 .3em}.md h4{font-size:1rem;margin:1em 0 .3em;color:var(--mu)}.md p{margin:.6em 0}.md ul,.md ol{padding-left:1.4em}.md li{margin:.2em 0}.md img{max-width:100%;height:auto;background:#fff;padding:6px;border-radius:8px;display:block;margin:8px 0}.md table{margin:10px 0}.md blockquote{border-left:4px solid var(--bd);margin:8px 0;padding:2px 12px;color:var(--mu)}.md code{background:var(--acs);padding:0 4px;border-radius:4px;font-size:.9em}.md .math{font-family:Georgia,"Times New Roman",serif;font-style:italic}.md div.math{background:var(--acs);border-radius:8px;padding:6px 12px;margin:10px 0;text-align:center}.wl{color:var(--ac);border-bottom:1px dotted var(--ac)}
+button.on{background:var(--ac);color:#241a19}:root[data-theme="dark"] button.on{color:#111}code{background:var(--acs);padding:0 4px;border-radius:4px;font-size:.9em}
+.pgr{background:#fff;color:#1e293b;border:1px solid #e2e8f0;border-radius:10px;padding:20px 22px;margin:14px 0}.pgr h1.t{font-size:1.8rem;line-height:1.2;color:#0f172a;text-align:center;margin:.6em 0 .2em;flex:none}.pgr h2{font-size:1.3rem;color:#0f172a;border-bottom:3px solid #0284c7;padding-bottom:6px;margin:0 0 14px}.pgr h3{font-size:1.05rem;color:#1e293b}.pgr .sub{color:#0284c7;font-weight:700;text-align:center;font-size:1.1rem}.pgr .ft{display:flex;justify-content:space-between;font-size:.75rem;color:#64748b;border-top:1px solid #e2e8f0;margin-top:16px;padding-top:6px}.pgr img{max-width:100%;height:auto;border-radius:10px;display:block;margin:10px auto}.pgr .bx{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 14px}.pgr .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.pgr th{background:#e0f2fe;color:#0f172a}.pgr th,.pgr td{border-color:#cbd5e1}.pgr code{background:#f1f5f9}.pgr .tag{color:#64748b}
+.sl img{width:100%;height:auto;border-radius:8px;border:1px solid var(--bd);display:block}
+.raw{max-width:900px;margin:0 auto;padding:4px 8px}.raw table{width:100%;margin:12px 0}.raw td,.raw th{vertical-align:top}.raw table.box{background:var(--acs);border:1px solid var(--ac);border-left:5px solid var(--ac);border-radius:8px}.raw table.box td{border:0;padding:10px 14px}.raw table.sqlbox td{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;background:var(--sf);border:1px solid var(--bd)}.raw th{background:var(--acs)}.raw a{color:var(--ac);word-break:break-all}
+</style></head><body>
+<header><div class="row"><h1>🔐 Bases de Datos · Examen 2</h1><button id="th" aria-label="Cambiar modo claro u oscuro">◐</button><button id="rs" aria-label="Borrar progreso">↺</button></div>
+<div class="pb" role="progressbar" aria-label="Progreso global"><i id="pg" style="width:0"></i></div><div class="tag" id="pt"></div>
+<nav id="nv"></nav><nav id="tp"></nav></header>
+<main id="m"></main>
+<script>
+const T=[
+{id:'i',n:'SO y Multitenant',
+th:[['Integración en el SO (Oracle Linux)',`<ul><li><b>Mínimo privilegio</b>: el motor <mark>nunca corre como root</mark>; propietario de la instalación = usuario <code>alumno</code>.</li><li><b>Grupos OSDBA/OSOPER/OSBACKUPDBA…</b>: se vinculan en <code>runInstaller</code> a un grupo Linux (<code>wheel</code> en clase, o <code>oinstall</code>/<code>dba</code>).</li><li><b><code>sqlplus / as sysdba</code></b>: la <mark>/</mark> delega la autenticación en el SO (¿pertenece al grupo OSDBA?). Permite conectar con la BD apagada para arrancarla.</li><li><b>Fichero de contraseñas</b> <code>orapw&lt;SID&gt;</code> (<code>$ORACLE_HOME/dbs/orapwasir</code>, herramienta <code>orapwd</code>): para conexiones administrativas <mark>remotas</mark>.</li></ul>`],
+['OFA y variables de entorno',`<div class="sc"><table><tr><th>Variable / fichero</th><th>Valor en la VM</th><th>Función</th></tr><tr><td>ORACLE_BASE</td><td>/opt/app/alumno</td><td>Raíz OFA: admin, diag, oradata</td></tr><tr><td>ORACLE_HOME</td><td>/opt/oracle-install</td><td>Binarios (sqlplus, dbca, netca, lsnrctl), dbs, network/admin</td></tr><tr><td>ORACLE_SID</td><td>asir</td><td>Qué instancia (segmento de RAM) usan los binarios locales</td></tr><tr><td>PATH</td><td>$PATH:$ORACLE_HOME/bin</td><td>Usar los comandos desde cualquier carpeta</td></tr><tr><td>/etc/oratab</td><td>SID:HOME:[Y|N]</td><td>Lo crea root.sh; instancias y arranque con dbstart/dbshut</td></tr><tr><td>~/.bashrc</td><td>/home/alumno</td><td>Los <code>export</code> persisten tras reiniciar</td></tr></table></div><div class="extra"><b>ORA-12162</b> al hacer <code>sqlplus / as sysdba</code> = ORACLE_SID vacío. Solución: <code>export ORACLE_SID=asir</code>, <code>source ~/.bashrc</code> o <code>source oraenv</code>.</div>`],
+['Instancia vs. base de datos',`<div class="sc"><table><tr><th></th><th>Instancia</th><th>Base de datos</th></tr><tr><td>Dónde</td><td>RAM + CPU (volátil)</td><td>Disco (persistente)</td></tr><tr><td>Componentes</td><td>SGA + procesos background</td><td>Datafiles .dbf, Control files .ctl, Redo logs .log</td></tr><tr><td>Identificador</td><td>ORACLE_SID (asir)</td><td>DB_NAME / SERVICE_NAME</td></tr><tr><td>Relación</td><td>1 instancia abre 1 BD (single instance); en <b>RAC</b> varias instancias abren la misma BD</td><td>Contiene diccionario de datos y esquemas de usuario</td></tr></table></div><div class="card" id="ib"></div>`],
+['Multitenant: CDB y PDB (21c)',`<p>Desde 21c toda BD es <mark>multitenant</mark>: varias BD bajo <b>una sola instancia</b>.</p><ul><li><b>CDB$ROOT</b> (<code>asir</code>, "el edificio"): diccionario maestro y usuarios comunes (<code>C##</code>, SYS, SYSTEM). <mark>Nunca</mark> crear tablas de aplicación aquí.</li><li><b>PDB$SEED</b>: plantilla <mark>READ ONLY</mark> para clonar PDBs en segundos.</li><li><b>PDB</b> (<code>pdasir</code>, "el apartamento"): BD conectable de trabajo (usuarios locales, tablespaces, tablas). <b>Sin SGA ni procesos propios</b>; se expone por un servicio (<code>pdasir</code>).</li></ul>`]],
+c:[['Principio de mínimo privilegio','El motor Oracle nunca se ejecuta como root; el propietario de la instalación es "alumno".'],['sqlplus / as sysdba','La "/" delega la autenticación en el SO: si el usuario está en el grupo OSDBA (wheel), entra sin contraseña, incluso con la BD apagada.'],['orapw<SID>','Fichero de contraseñas (orapwd) en $ORACLE_HOME/dbs para conexiones administrativas remotas.'],['ORACLE_BASE / ORACLE_HOME','/opt/app/alumno (raíz OFA: diag, oradata) / /opt/oracle-install (binarios, dbs, network/admin).'],['ORACLE_SID','Identifica la instancia local (asir). Vacío → ORA-12162.'],['/etc/oratab','Formato SID:ORACLE_HOME:[Y|N]; lo crea root.sh; indica qué instancias arrancan con dbstart/dbshut.'],['Instancia vs. BD','Instancia = SGA + procesos (RAM, volátil). BD = ficheros en disco (persistente).'],['CDB$ROOT','Contenedor raíz: diccionario maestro y usuarios comunes (C##, SYS, SYSTEM). No crear objetos de aplicación.'],['PDB$SEED','Plantilla READ ONLY para clonar nuevas PDBs en segundos.'],['PDB (pdasir)','BD conectable de trabajo; comparte instancia y SGA de la CDB; se accede por servicio.']],
+q:[['¿Qué indica la barra "/" en "sqlplus / as sysdba"?',['Que no hay contraseña definida','Que se delega la autenticación en el SO (grupo OSDBA)','Que se conecta a la PDB','Que se usa el fichero orapw'],1,'Oracle pregunta al kernel Linux si el usuario pertenece al grupo OSDBA (wheel).'],
+['El error ORA-12162 al conectar como sysdba indica que…',['El listener está caído','ORACLE_SID está vacío','Falta el SPFILE','La PDB está cerrada'],1,'Se soluciona con export ORACLE_SID=asir o source oraenv.'],
+['¿Dónde residen los binarios del motor?',['ORACLE_BASE','ORACLE_SID','ORACLE_HOME','/etc/oratab'],2,'ORACLE_HOME = /opt/oracle-install (bin, dbs, network/admin).'],
+['¿Qué contiene /etc/oratab?',['Contraseñas SYS','SID:ORACLE_HOME:[Y|N]','Los datafiles','El listener.ora'],1,'Lo crea root.sh e indica qué instancias arrancan con dbstart/dbshut.'],
+['¿Cuál es volátil y solo existe con el motor encendido?',['Base de datos','Datafile','Instancia','Control file'],2,'La instancia es memoria + procesos; la BD es persistente en disco.'],
+['¿Qué es PDB$SEED?',['Una PDB de usuario','Plantilla READ ONLY para clonar PDBs','El diccionario de datos','Un tablespace'],1,'Se usa como molde para crear nuevas PDBs en segundos.'],
+['¿Dónde NO deben crearse tablas de aplicación?',['En una PDB','En CDB$ROOT','En un tablespace de usuario','En el esquema local'],1,'CDB$ROOT es solo administrativa (usuarios comunes C##, SYS, SYSTEM).'],
+['¿Cuántas SGA tiene una PDB como pdasir?',['Una propia','Dos','Ninguna: comparte la de la CDB','Depende del SID'],2,'No tiene procesos ni SGA propios; se expone mediante un servicio.'],
+['¿Para qué sirve el fichero orapw<SID>?',['Guardar el SPFILE','Conexiones administrativas remotas','Registrar el listener','Almacenar redo logs'],1,'Credenciales cifradas de SYSDBA/SYSOPER; se gestiona con orapwd.'],
+['En una arquitectura RAC…',['Una instancia abre varias BD','Varias instancias abren una misma BD compartida','No hay instancia','Solo hay PDBs'],1,'Single Instance: 1 instancia = 1 BD. RAC: varias instancias, 1 BD.']],
+s:['Nunca root. sqlplus / as sysdba = autenticación delegada en el SO (OSDBA/wheel).','ORACLE_BASE=/opt/app/alumno · ORACLE_HOME=/opt/oracle-install · ORACLE_SID=asir.','ORA-12162 → ORACLE_SID vacío.','Instancia (RAM, volátil) vs BD (disco). CDB$ROOT (no tablas) · PDB$SEED (RO) · PDB pdasir (trabajo, sin SGA propia).']},
+{id:'m',n:'Memoria, procesos y ficheros',
+th:[['SGA y PGA',`<ul><li><b>SGA</b> (compartida, se reserva al arrancar):<ul><li><mark>Database Buffer Cache</mark>: copias de bloques de datafiles; los modificados sin bajar a disco = <b>bloques sucios</b>.</li><li><mark>Redo Log Buffer</mark>: registra cada cambio antes de volcarlo a los redo logs.</li><li><mark>Shared Pool</mark>: Library Cache (planes SQL/PL-SQL compilados) + Data Dictionary Cache.</li><li>Large Pool / Java Pool: RMAN, paralelo, Java (opcionales).</li></ul></li><li><b>PGA</b> (privada por Server Process): SQL Work Area (ORDER BY, GROUP BY, Hash Join) y variables de sesión.</li></ul>`],
+['Procesos en segundo plano',`<p>En Linux: <code>ora_&lt;proceso&gt;_&lt;SID&gt;</code> (<code>ps -ef | grep ora_</code> o <code>v$bgprocess</code>).</p><div class="sc"><table><tr><th>Proceso</th><th>Misión</th></tr><tr><td>DBWn</td><td>Escribe bloques sucios del Buffer Cache a los datafiles (lazy write; cache llena o checkpoint)</td></tr><tr><td>LGWR</td><td>Redo Log Buffer → redo logs; <mark>en cada COMMIT</mark> → Durabilidad (ACID)</td></tr><tr><td>CKPT</td><td>Ordena a DBWn volcar y actualiza el SCN en datafiles y control files</td></tr><tr><td>SMON</td><td>Instance Recovery al arrancar: roll forward (redo) + rollback (undo)</td></tr><tr><td>PMON</td><td>Cliente caído: revierte su transacción, libera bloqueos y limpia PGA</td></tr><tr><td>LREG</td><td>Registra instancia y servicios de PDBs abiertas en el listener (1521)</td></tr></table></div><div class="card" id="pr"></div>`],
+['Los 6 tipos de ficheros',`<div class="sc"><table><tr><th>Fichero</th><th>Ruta</th><th>Clave</th></tr><tr><td>SPFILE/PFILE</td><td>$ORACLE_HOME/dbs (spfileasir.ora / initasir.ora)</td><td>Fase NOMOUNT: sga_target, control_files, processes</td></tr><tr><td>Control files</td><td>oradata/ASIR/control01.ctl…</td><td>Fase MOUNT: mapa físico + SCN; multiplexar. <code>V$CONTROLFILE</code></td></tr><tr><td>Datafiles/Tempfiles</td><td>oradata/ASIR/system01.dbf…</td><td>Fase OPEN: tablas e índices en tablespaces. <code>V$DATAFILE</code>, <code>CDB_DATA_FILES</code></td></tr><tr><td>Online Redo Logs</td><td>oradata/ASIR/redo01.log…</td><td>Circular (escribe LGWR); mínimo 2 grupos. <code>V$LOG</code>, <code>V$LOGFILE</code></td></tr><tr><td>Password file</td><td>$ORACLE_HOME/dbs/orapwasir</td><td>SYSDBA/SYSOPER remotos. <code>V$PWFILE_USERS</code></td></tr><tr><td>Alert log</td><td>$ORACLE_BASE/diag/rdbms/asir/asir/trace/alert_asir.log</td><td>Texto plano: arranques, paradas, errores ORA-. <code>V$DIAG_INFO</code></td></tr></table></div>`],
+['PFILE vs. SPFILE y ALTER SYSTEM',`<ul><li><b>PFILE</b>: texto plano, editable con nano/vi; todo cambio exige reiniciar.</li><li><b>SPFILE</b>: binario (por defecto). <mark>Nunca editarlo con nano</mark> (se corrompe).</li></ul><p><code>ALTER SYSTEM SET parametro = valor SCOPE = MEMORY | SPFILE | BOTH;</code></p><ul><li><b>MEMORY</b>: solo RAM, se pierde al reiniciar.</li><li><b>SPFILE</b>: para el próximo arranque (obligatorio en parámetros estáticos como <code>processes</code>).</li><li><b>BOTH</b>: en caliente y persistente.</li></ul>`]],
+c:[['SGA','System Global Area: memoria compartida reservada al arrancar la instancia (Buffer Cache, Redo Log Buffer, Shared Pool, Large/Java Pool).'],['PGA','Memoria privada por Server Process: SQL Work Area (ORDER BY, GROUP BY, Hash Join) y variables de sesión.'],['Bloque sucio','Bloque modificado en el Buffer Cache aún no escrito a los datafiles.'],['Shared Pool','Library Cache (planes de ejecución compilados) + Data Dictionary Cache.'],['DBWn','Escribe bloques sucios a los datafiles de forma diferida (lazy write).'],['LGWR','Vuelca el Redo Log Buffer a los redo logs; se dispara en cada COMMIT (Durabilidad).'],['CKPT','Sincroniza BD: pide a DBWn volcar y actualiza el SCN en datafiles y control files.'],['SMON','Instance Recovery en el arranque tras caída o SHUTDOWN ABORT (roll forward + rollback).'],['PMON','Limpia procesos de usuario caídos: rollback, libera bloqueos y PGA.'],['LREG','Registra instancia y servicios de PDBs abiertas en el Listener (1521).'],['SPFILE vs PFILE','SPFILE binario (ALTER SYSTEM, nunca nano); PFILE texto plano (requiere reinicio).'],['SCOPE','MEMORY solo RAM · SPFILE próximo arranque (estáticos) · BOTH ambos.']],
+q:[['¿Qué proceso escribe los bloques sucios a los datafiles?',['LGWR','DBWn','CKPT','PMON'],1,'DBWn hace escritura diferida desde el Buffer Cache.'],
+['¿Qué proceso se dispara de forma síncrona en cada COMMIT?',['DBWn','SMON','LGWR','LREG'],2,'LGWR garantiza la Durabilidad (ACID) escribiendo el redo.'],
+['Un cliente se cuelga bruscamente. ¿Quién revierte su transacción y libera bloqueos?',['SMON','PMON','CKPT','LREG'],1,'PMON limpia procesos de usuario caídos y su PGA.'],
+['¿Qué proceso hace Instance Recovery al arrancar tras un SHUTDOWN ABORT?',['SMON','PMON','DBWn','CKPT'],0,'SMON aplica roll forward (redo) y rollback (undo).'],
+['¿Dónde se guardan compilados los planes de ejecución SQL?',['Buffer Cache','Redo Log Buffer','Library Cache (Shared Pool)','PGA'],2,'La Library Cache evita recalcular los planes.'],
+['¿Qué zona contiene el SQL Work Area para ordenaciones?',['SGA','PGA','Large Pool','Control file'],1,'La PGA es privada de cada Server Process.'],
+['¿Qué fichero guarda el mapa físico de la BD y el SCN actual?',['Datafile','Alert log','Control file','Password file'],2,'Se lee en la fase MOUNT y se multiplexa.'],
+['¿Cuántos grupos de redo log como mínimo?',['1','2','3','4'],1,'Bitácora circular con mínimo 2 grupos.'],
+['¿Qué SCOPE es obligatorio para un parámetro estático como "processes"?',['MEMORY','SPFILE','BOTH','Ninguno'],1,'Los estáticos solo se aplican en el siguiente arranque.'],
+['¿Por qué no se debe editar el SPFILE con nano?',['Es de solo lectura','Es binario y se corrompe','Está cifrado','Pertenece a root'],1,'Se modifica con ALTER SYSTEM SET.'],
+['¿Qué proceso registra los servicios de las PDBs en el listener?',['LREG','PMON','SMON','LGWR'],0,'LREG se registra dinámicamente en el puerto 1521.']],
+s:['SGA compartida (Buffer Cache, Redo Buffer, Shared Pool) · PGA privada (SQL Work Area).','DBWn → datafiles (lazy) · LGWR → redo (en COMMIT) · CKPT → SCN · SMON → recovery · PMON → limpia · LREG → listener.','6 ficheros: SPFILE/PFILE, control, datafiles, redo (mín. 2 grupos), password, alert log.','ALTER SYSTEM SET … SCOPE=MEMORY|SPFILE|BOTH. SPFILE nunca con nano.']},
+{id:'a',n:'Arranque, red y diccionario',
+th:[['Fases de STARTUP',`<ol><li><b>NOMOUNT</b> ("instance started"): lee SPFILE/PFILE, reserva SGA, lanza procesos. Solo vistas en memoria (<code>V$INSTANCE</code>, <code>V$PARAMETER</code>). Uso: <code>CREATE DATABASE</code>, recrear control files.</li><li><b>MOUNT</b> ("database mounted"): abre los control files; conoce datafiles y redo pero no los abre. Permite <code>V$DATAFILE</code>/<code>V$LOGFILE</code>, no <code>DBA_USERS</code>. Uso: ARCHIVELOG, renombrar ficheros, recuperaciones.</li><li><b>OPEN</b> ("database opened"): abre y verifica SCN de datafiles y redo; SMON recupera si hizo falta. CDB$ROOT abierto.</li></ol><div class="card"><b>PDBs</b>: tras abrir la raíz quedan en <mark>MOUNTED</mark>.<br><code>ALTER PLUGGABLE DATABASE pdasir OPEN;</code><br><code>ALTER PLUGGABLE DATABASE pdasir SAVE STATE;</code> (recuerda el estado)</div><div class="card" id="sd"></div>`],
+['Modos de SHUTDOWN',`<div class="sc"><table><tr><th>Modo</th><th>Sesiones activas</th><th>Resultado</th></tr><tr><td>NORMAL (defecto)</td><td>Espera a que todos hagan EXIT</td><td>Limpia; rara vez usado</td></tr><tr><td>TRANSACTIONAL</td><td>Espera a que acaben las transacciones y desconecta</td><td>Limpia</td></tr><tr><td><b>IMMEDIATE</b> (estándar DBA)</td><td>Cancela sentencias, ROLLBACK automático y desconecta</td><td>Limpia y consistente (checkpoint completo)</td></tr><tr><td>ABORT (emergencia)</td><td>Mata procesos sin rollback ni volcado</td><td><mark>Inconsistente</mark>: SMON hace Instance Recovery en el siguiente STARTUP</td></tr></table></div><p>En los tres primeros las nuevas conexiones se bloquean; en ABORT se cortan en el acto.</p>`],
+['Listener y tnsnames',`<ul><li><b>Listener</b> (<code>tnslsnr</code>, servidor, <code>$ORACLE_HOME/network/admin/listener.ora</code>, configurado con <code>netca</code>): escucha en el <mark>puerto 1521</mark> y deriva a un Server Process. <code>lsnrctl start|stop|status|reload</code>.</li><li><b>tnsnames.ora</b> (cliente): "agenda" que traduce un alias (<code>PDASIR</code>) a protocolo, HOST, puerto y SERVICE_NAME. Se prueba con <code>tnsping PDASIR</code>.</li><li>Conexión: <code>sqlplus usuario/clave@PDASIR</code> o Easy Connect <code>sqlplus system@localhost:1521/pdasir</code>.</li></ul>`],
+['Diccionario de datos',`<p>Catálogo interno de metadatos; reside en los tablespaces <b>SYSTEM y SYSAUX</b>, esquema <b>SYS</b>; se crea con <code>catalog.sql</code> y <code>catproc.sql</code>.</p><div class="sc"><table><tr><th>Familia</th><th>Muestra</th><th>Ejemplos</th></tr><tr><td>USER_*</td><td>Solo objetos del usuario actual</td><td>USER_TABLES, USER_OBJECTS</td></tr><tr><td>ALL_*</td><td>Propios + los de otros con privilegios</td><td>ALL_TABLES, ALL_VIEWS</td></tr><tr><td>DBA_*</td><td>Todo el contenedor (rol DBA/SYSDBA)</td><td>DBA_USERS, DBA_DATA_FILES</td></tr><tr><td>CDB_*</td><td>Todos los contenedores (desde CDB$ROOT, col. CON_ID)</td><td>CDB_PDBS, CDB_USERS</td></tr><tr><td>V$</td><td>RAM y control files; disponibles en NOMOUNT/MOUNT/OPEN</td><td>V$INSTANCE, V$SESSION, V$DATAFILE</td></tr></table></div><p>Todas menos <code>V$</code> requieren BD en <b>OPEN</b>.</p><div class="extra"><code>SHOW CON_NAME; SHOW PDBS; ALTER SESSION SET CONTAINER = pdasir;</code><br><code>SELECT tablespace_name, file_name, bytes/1024/1024 AS tamano_mb FROM dba_data_files;</code><br><code>SELECT sid, serial#, username, status, machine, program FROM v$session WHERE username IS NOT NULL;</code></div>`]],
+c:[['NOMOUNT','Lee SPFILE, reserva SGA, lanza procesos; solo vistas V$ en memoria. Para CREATE DATABASE o recrear control files.'],['MOUNT','Abre control files; conoce datafiles y redo. Para ARCHIVELOG, renombrar ficheros, recuperaciones.'],['OPEN','Abre datafiles y redo verificando SCN; SMON recupera si hace falta.'],['SAVE STATE','ALTER PLUGGABLE DATABASE pdasir SAVE STATE: la PDB recuerda su estado abierto tras reiniciar.'],['SHUTDOWN IMMEDIATE','Rollback automático, checkpoint completo; BD consistente. Estándar del DBA.'],['SHUTDOWN ABORT','Equivale a un corte eléctrico; BD inconsistente; Instance Recovery al arrancar.'],['Listener','tnslsnr en el servidor, puerto 1521, listener.ora; se gestiona con lsnrctl.'],['tnsnames.ora','Fichero cliente que traduce alias → HOST, puerto, SERVICE_NAME; se prueba con tnsping.'],['Easy Connect','sqlplus system@localhost:1521/pdasir (sin tnsnames.ora).'],['USER_ / ALL_ / DBA_ / CDB_','Del alcance más estrecho al más amplio; CDB_ abarca todos los contenedores (CON_ID).'],['V$','Vistas dinámicas desde RAM y control files; sirven en NOMOUNT/MOUNT/OPEN.'],['Dónde reside el diccionario','Tablespaces SYSTEM y SYSAUX, esquema SYS; creado por catalog.sql y catproc.sql.']],
+q:[['¿Qué fase del STARTUP reserva la SGA y lanza los procesos?',['MOUNT','NOMOUNT','OPEN','SHUTDOWN'],1,'En NOMOUNT aún no se abre ningún fichero de la BD.'],
+['¿Qué fase abre los control files?',['NOMOUNT','MOUNT','OPEN','Ninguna'],1,'En MOUNT se conoce la lista de datafiles y redo.'],
+['¿En qué fase se activa el modo ARCHIVELOG?',['NOMOUNT','MOUNT','OPEN','Cualquiera'],1,'También se renombran ficheros y se hacen recuperaciones completas.'],
+['Tras abrir CDB$ROOT, la PDB pdasir queda en…',['OPEN','MOUNTED','Borrada','READ ONLY'],1,'Hay que hacer ALTER PLUGGABLE DATABASE pdasir OPEN.'],
+['¿Qué modo de parada es el estándar del DBA?',['NORMAL','TRANSACTIONAL','IMMEDIATE','ABORT'],2,'Hace rollback y checkpoint completo; BD consistente.'],
+['¿Qué modo deja la BD inconsistente?',['NORMAL','IMMEDIATE','TRANSACTIONAL','ABORT'],3,'Obliga a SMON a hacer Instance Recovery en el próximo STARTUP.'],
+['¿Qué fichero del cliente traduce un alias en HOST, puerto y servicio?',['listener.ora','tnsnames.ora','oratab','orapwasir'],1,'Se verifica con tnsping.'],
+['¿Puerto por defecto del listener?',['1433','3306','1521','5432'],2,'Lo gestiona lsnrctl.'],
+['¿Qué vista muestra TODOS los objetos del contenedor actual?',['USER_TABLES','ALL_TABLES','DBA_TABLES','V$SESSION'],2,'Requiere rol DBA o SYSDBA.'],
+['¿Qué familia usa CON_ID para identificar contenedores?',['USER_*','ALL_*','CDB_*','V$'],2,'Desde CDB$ROOT muestra raíz y PDBs abiertas.'],
+['¿Qué vistas funcionan ya en NOMOUNT?',['DBA_USERS','USER_TABLES','V$INSTANCE','CDB_PDBS'],2,'Las V$ leen de la RAM; el resto exige OPEN.']],
+s:['STARTUP: NOMOUNT (SGA+procesos) → MOUNT (control files) → OPEN (datafiles+redo). PDB: OPEN + SAVE STATE.','SHUTDOWN: NORMAL / TRANSACTIONAL / IMMEDIATE (estándar) / ABORT (inconsistente).','Listener 1521 (listener.ora) ↔ tnsnames.ora + tnsping.','USER_ < ALL_ < DBA_ < CDB_; V$ desde RAM. Diccionario en SYSTEM/SYSAUX (SYS).']}];
+const D=[['i','Explica la autenticación "sqlplus / as sysdba" y el error ORA-12162.',['La "/" delega en el SO (grupo OSDBA/wheel)','Permite conectar con la BD apagada','Fichero orapw para accesos remotos','ORA-12162 = ORACLE_SID vacío; export / source oraenv']],['m','Describe qué ocurre en un COMMIT y qué procesos intervienen.',['Cambio en Buffer Cache (bloque sucio) y en Redo Log Buffer','LGWR escribe el redo a disco síncronamente (Durabilidad)','DBWn escribe el bloque más tarde (lazy write)','CKPT/SCN y recuperación con SMON si hay caída']],['a','Explica las fases de arranque y los modos de SHUTDOWN.',['NOMOUNT: SPFILE, SGA, procesos','MOUNT: control files','OPEN: datafiles y redo, SCN','IMMEDIATE vs ABORT e Instance Recovery']]];
+const CLS={ib:{t:'¿Instancia o base de datos?',l:['Instancia (RAM)','Base de datos (disco)'],i:0,k:0,it:[['SGA (Buffer Cache, Shared Pool)',0,'Memoria de la instancia.'],['Datafiles (.dbf)',1,'Ficheros físicos de la BD.'],['PMON',0,'Proceso background.'],['Control Files (.ctl)',1,'Ficheros físicos de la BD.'],['PGA',0,'Memoria de la instancia.'],['Redo Logs (.log)',1,'Ficheros físicos de la BD.'],['DBWn',0,'Proceso background.']]},
+pr:{t:'¿Qué proceso es?',l:['DBWn','LGWR','SMON','PMON'],i:0,k:0,it:[['Escribe bloques sucios a los datafiles',0,'DBWn: lazy write.'],['Se dispara en cada COMMIT',1,'LGWR: redo → disco.'],['Instance Recovery tras SHUTDOWN ABORT',2,'SMON: roll forward + rollback.'],['Libera bloqueos de un cliente caído',3,'PMON limpia sesiones muertas.']]},
+sd:{t:'¿En qué fase estamos?',l:['NOMOUNT','MOUNT','OPEN'],i:0,k:0,it:[['Se reserva la SGA y se lanzan los procesos',0,'Sin abrir aún ficheros de la BD.'],['Se abren los control files',1,'Se conoce el mapa de datafiles y redo.'],['Se activa ARCHIVELOG',1,'Requiere MOUNT.'],['Se abren datafiles y SMON recupera si hace falta',2,'Fase OPEN.'],['Se ejecuta CREATE DATABASE',0,'Solo en NOMOUNT.']]}};
+const FF={i:`<div class="raw md"><div class="sc"><table class="box">
+
+<thead>
+<tr class="header">
+<th><p><strong>2º CFGS ASIR | MÓDULO PROFESIONAL: ADMINISTRACIÓN DE SGBD (CÓDIGO 0377) — RA2 (10%)</strong></p>
+<p><strong>APUNTES TEÓRICOS — UNIDAD DE TRABAJO 2 (UT2):<br/>
+CONFIGURACIÓN Y ARQUITECTURA DE ORACLE DATABASE</strong></p>
+<p><em>Integración del SGBD en el sistema operativo Linux, Instancia vs Base de Datos (Multitenant CDB/PDB), Arquitectura de Memoria (SGA/PGA), Procesos en Segundo Plano, Archivos en Disco, Arranque/Parada y Estructura del Diccionario de Datos.</em></p></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table></div><p><strong>1. Integración del SGBD en el Sistema Operativo (Oracle Linux)</strong></p><p>Un Sistema Gestor de Bases de Datos (SGBD) empresarial como Oracle Database 21c no funciona de forma aislada: se apoya directamente en el kernel de Linux, en su sistema de ficheros y en su modelo de seguridad de usuarios y grupos. Comprender esta integración es esencial para cualquier Administrador de Bases de Datos (DBA).</p><p><strong>1.1. Control de Usuarios, Grupos del SO y Autenticación OSDBA</strong></p><ul>
+<li><p><strong>Principio de mínimo privilegio:</strong> Por razones de seguridad, los procesos del motor Oracle jamás se ejecutan bajo el superusuario root de Linux. En nuestra máquina virtual de laboratorio, el propietario de la instalación es el usuario 'alumno'.</p></li>
+<li><p><strong>Grupos administrativos del SGBD:</strong> Durante la instalación con runInstaller se vinculan los privilegios internos del motor (OSDBA, OSOPER, OSBACKUPDBA, OSDGDBA, OSKMDBA) con un grupo del sistema operativo Linux. En distribuciones empresariales Red Hat / Oracle Linux se utiliza el grupo 'wheel' (como hicimos en la instalación de clase) o los grupos específicos 'oinstall' y 'dba'.</p></li>
+<li><p><strong>Autenticación delegada en el Sistema Operativo (sqlplus / as sysdba):</strong> Cuando ejecutamos el comando 'sqlplus / as sysdba', la barra inclinada (/) indica a Oracle que no verifique usuario y contraseña contra el diccionario de datos, sino que pregunte al kernel de Linux si el usuario actual pertenece al grupo OSDBA (wheel). Gracias a ello, podemos conectarnos incluso cuando la base de datos está completamente apagada para poder encenderla.</p></li>
+<li><p><strong>Fichero externo de contraseñas (orapw&lt;SID&gt;):</strong> Para conexiones administrativas remotas por red donde no se puede validar el usuario de Linux, Oracle utiliza un fichero binario cifrado ubicado en $ORACLE_HOME/dbs/orapwasir, gestionado con la herramienta orapwd.</p></li>
+</ul><p><strong>1.2. Sistema de Ficheros (Arquitectura OFA) y Variables de Entorno</strong></p><p>Oracle organiza sus directorios siguiendo el estándar OFA (Optimal Flexible Architecture), que separa el software ejecutable de los archivos de datos y diagnóstico:</p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Variable / Fichero</strong></th>
+<th><strong>Ruta en nuestra VM de Aula</strong></th>
+<th><strong>Función Técnica en el Sistema Operativo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ORACLE_BASE</strong></td>
+<td>/opt/app/alumno</td>
+<td>Directorio raíz de la jerarquía OFA. Aloja subcarpetas de administración, trazas (diag) y los ficheros físicos de datos (oradata).</td>
+</tr>
+<tr class="even">
+<td><strong>ORACLE_HOME</strong></td>
+<td>/opt/oracle-install</td>
+<td>Directorio donde residen los binarios ejecutables del motor (bin/sqlplus, dbca, netca, lsnrctl), librerías y ficheros de configuración (dbs, network/admin).</td>
+</tr>
+<tr class="odd">
+<td><strong>ORACLE_SID</strong></td>
+<td>asir</td>
+<td>System Identifier. Variable crítica que indica a los binarios locales a qué segmento de memoria RAM (Instancia) deben conectarse.</td>
+</tr>
+<tr class="even">
+<td><strong>PATH</strong></td>
+<td>$PATH:$ORACLE_HOME/bin</td>
+<td>Permite invocar sqlplus, lsnrctl, dbca, netca o tnsping desde cualquier carpeta de la terminal de Linux.</td>
+</tr>
+<tr class="odd">
+<td><strong>/etc/oratab</strong></td>
+<td>/etc/oratab</td>
+<td>Fichero creado por root.sh con el formato 'SID:ORACLE_HOME:[Y|N]'. Indica qué instancias existen en el servidor y cuáles arrancan con dbstart/dbshut.</td>
+</tr>
+<tr class="even">
+<td><strong>~/.bashrc</strong></td>
+<td>/home/alumno/.bashrc</td>
+<td>Script de inicio de la shell Bash donde se declaran las sentencias 'export' para que persistan tras cada reinicio.</td>
+</tr>
+</tbody>
+</table></div><div class="sc"><table class="box">
+
+<thead>
+<tr class="header">
+<th><strong>⚠️ Error Clásico de Laboratorio: ORA-12162<br/>
+</strong>Si al ejecutar 'sqlplus / as sysdba' aparece el error 'ORA-12162: TNS:net service name is incorrectly specified', significa que la variable de entorno ORACLE_SID está vacía en tu terminal actual. Solución inmediata: ejecutar 'export ORACLE_SID=asir' o cargar el perfil con 'source ~/.bashrc' (o usar el script oficial 'source oraenv').</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table></div><p><strong>2. Relación entre el SGBD y la Base de Datos: Instancias y Multitenant</strong></p><p>A diferencia de otros motores más ligeros (como MySQL o SQLite), en Oracle existe una separación radical entre el concepto de Base de Datos y el concepto de Instancia, conectando directamente con el Nivel Interno o Físico de la arquitectura ANSI/SPARC.</p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Criterio</strong></th>
+<th><strong>Instancia de Base de Datos (Memoria + CPU)</strong></th>
+<th><strong>Base de Datos (Almacenamiento en Disco)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Naturaleza</strong></td>
+<td>Volátil y temporal: solo existe mientras el motor está encendido.</td>
+<td>Persistente y física: permanece grabada aunque se apague el servidor.</td>
+</tr>
+<tr class="even">
+<td><strong>Componentes</strong></td>
+<td>Área de memoria compartida (SGA) + Procesos en segundo plano (Background Processes).</td>
+<td>Ficheros físicos en el sistema de archivos: Datafiles (.dbf), Control Files (.ctl) y Redo Logs (.log).</td>
+</tr>
+<tr class="odd">
+<td><strong>Identificador</strong></td>
+<td>Se identifica mediante ORACLE_SID (en nuestra VM: 'asir').</td>
+<td>Se identifica por el parámetro DB_NAME y expone servicios de red (SERVICE_NAME).</td>
+</tr>
+<tr class="even">
+<td><strong>Relación</strong></td>
+<td>Una instancia monta y abre una única base de datos (en arquitectura Single Instance). En sistemas en clúster (Oracle RAC), varias instancias en distintos servidores pueden abrir simultáneamente una misma base de datos compartida.</td>
+<td>Contiene tanto los metadatos del sistema (Diccionario de Datos) como los esquemas y tablas de los usuarios.</td>
+</tr>
+</tbody>
+</table></div><p><strong>2.1. Arquitectura Multitenant (CDB y PDB en Oracle 21c)</strong></p><p>Desde Oracle Database 21c, toda base de datos creada es obligatoriamente una base de datos multitenant (multitenencia). Esta arquitectura consolida múltiples bases de datos independientes bajo una única instancia en memoria:</p><ul>
+<li><p><strong>CDB$ROOT (Contenedor Raíz — 'asir'):</strong> Es la estructura administrativa central ('el edificio'). Contiene el diccionario de datos maestro de Oracle y los usuarios comunes (cuyo nombre empieza por C##, además de SYS y SYSTEM). Regla de oro: nunca se deben crear tablas de aplicaciones ni esquemas de usuario dentro de CDB$ROOT.</p></li>
+<li><p><strong>PDB$SEED (Plantilla Semilla):</strong> Es un contenedor modelo en modo de solo lectura (READ ONLY) que Oracle utiliza internamente como molde para clonar nuevas bases de datos conectables en cuestión de segundos.</p></li>
+<li><p><strong>PDB (Pluggable Database — 'pdasir'):</strong> Es la base de datos conectable de trabajo ('el apartamento'). Para un desarrollador o aplicación cliente se comporta como una base de datos completa e independiente, donde creamos usuarios locales, tablespaces y tablas. Sin embargo, no tiene procesos ni SGA propios: comparte la instancia de la CDB y se expone en la red mediante un Servicio (pdasir).</p></li>
+</ul></div>`,m:`<div class="raw md"><p><strong>3. Arquitectura del SGBD: Memoria, Procesos y Archivos en Disco</strong></p><p><strong>3.1. Espacios de Memoria (SGA y PGA)</strong></p><p>Para alcanzar un alto rendimiento y garantizar las propiedades ACID, Oracle nunca lee ni modifica datos directamente sobre el disco duro cuando un usuario ejecuta una consulta; todo se procesa primero en memoria RAM, que se divide en dos grandes áreas:</p><ul>
+<li><p><strong>SGA (System Global Area — Memoria Compartida):</strong> Se reserva en Linux al arrancar la instancia y es compartida por todos los procesos del servidor y sesiones. Sus estructuras clave son:<br/>
+• Database Buffer Cache: Almacena en RAM copias de los bloques de datos leídos de los Datafiles (.dbf). Los bloques modificados por un UPDATE o INSERT que aún no se han bajado a disco se denominan 'bloques sucios' (Dirty Buffers).<br/>
+• Redo Log Buffer: Buffer circular de altísima velocidad que registra cronológicamente cada cambio realizado en la base de datos antes de ser volcado a los archivos Online Redo Log.<br/>
+• Shared Pool: Contiene la Library Cache (donde se guardan compilados los planes de ejecución de las sentencias SQL y bloques PL/SQL para no recalcularlos) y la Data Dictionary Cache (metadatos de tablas, usuarios y permisos en caché).<br/>
+• Large Pool / Java Pool: Áreas opcionales para copias de seguridad con RMAN, procesos paralelos y código Java.</p></li>
+<li><p><strong>PGA (Program Global Area — Memoria Privada):</strong> Zona de memoria exclusiva y no compartida asignada a cada proceso de servidor (Server Process) cuando un usuario se conecta. Contiene el SQL Work Area (donde se realizan ordenaciones con ORDER BY, agrupaciones GROUP BY y cruces Hash Join) y las variables privadas de sesión.</p></li>
+</ul><p><strong>3.2. Procesos en Segundo Plano (Background Processes)</strong></p><p>En el sistema operativo Linux, la instancia de Oracle se materializa como una colección de procesos demonios cuyos nombres siguen el patrón 'ora_&lt;proceso&gt;_&lt;SID&gt;' (visibles con el comando 'ps -ef | grep ora_'; o desde BBDD: SELECT name, description FROM v$bgprocess WHERE paddr != '00' ORDER BY name;):</p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Proceso</strong></th>
+<th><strong>Nombre en Linux</strong></th>
+<th><strong>Misión Crítica dentro de la Arquitectura Oracle</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>DBWn<br/>
+(Database Writer)</strong></td>
+<td>ora_dbw0_asir</td>
+<td>Escribe de forma asíncrona y diferida (lazy write) los bloques modificados ('sucios') desde el Database Buffer Cache (SGA) hacia los Datafiles (.dbf) en disco cuando la caché se llena o ocurre un Checkpoint.</td>
+</tr>
+<tr class="even">
+<td><strong>LGWR<br/>
+(Log Writer)</strong></td>
+<td>ora_lgwr_asir</td>
+<td>Escribe secuencialmente el contenido del Redo Log Buffer hacia los Online Redo Log Files (.log) en disco. Se dispara síncronamente en cada COMMIT: garantiza la Durabilidad (ACID).</td>
+</tr>
+<tr class="odd">
+<td><strong>CKPT<br/>
+(Checkpoint)</strong></td>
+<td>ora_ckpt_asir</td>
+<td>Sincroniza la base de datos: ordena a DBWn volcar bloques a disco y actualiza el número de cambio del sistema (SCN) en las cabeceras de todos los Datafiles y en los Control Files.</td>
+</tr>
+<tr class="even">
+<td><strong>SMON<br/>
+(System Monitor)</strong></td>
+<td>ora_smon_asir</td>
+<td>Responsable de la Recuperación Automática de la Instancia (Instance Recovery) al arrancar tras un corte eléctrico o SHUTDOWN ABORT: aplica Roll Forward (con los Redo Logs) y Rollback (con el espacio UNDO).</td>
+</tr>
+<tr class="odd">
+<td><strong>PMON<br/>
+(Process Monitor)</strong></td>
+<td>ora_pmon_asir</td>
+<td>Vigila los procesos de usuario. Si un cliente se desconecta bruscamente o se cuelga, PMON revierte su transacción activa, libera los bloqueos de filas y limpia su memoria PGA.</td>
+</tr>
+<tr class="even">
+<td><strong>LREG<br/>
+(Listener Reg.)</strong></td>
+<td>ora_lreg_asir</td>
+<td>Registra dinámicamente y de forma automática la instancia ('asir') y los servicios de las PDBs abiertas ('pdasir') ante el proceso Listener de red en el puerto TCP 1521.</td>
+</tr>
+</tbody>
+</table></div><p>Más información en:</p><p><a href="https://docs.oracle.com/cd/B19306_01/server.102/b14220/process.htm%20">https://docs.oracle.com/cd/B19306_01/server.102/b14220/process.htm</a> <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/background-processes.html">https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/background-processes.html</a></p><p><strong>3.3. Archivos en Disco y Gestión de Parámetros (SPFILE vs PFILE)</strong></p><p>En el sistema de ficheros de Linux, Oracle distribuye su información en seis tipos de archivos físicos:</p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Tipo de Archivo</strong></th>
+<th><strong>Ubicación / Extensión</strong></th>
+<th><strong>Descripción y Consulta en el Diccionario</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Ficheros de Parámetros<br/>
+(SPFILE / PFILE)</strong></td>
+<td>$ORACLE_HOME/dbs/<br/>
+spfileasir.ora / initasir.ora</td>
+<td>Se leen en la fase NOMOUNT. Definen el tamaño de la SGA (sga_target), ruta de los control files, límite de procesos (processes) y cursores (open_cursors).</td>
+</tr>
+<tr class="even">
+<td><strong>2. Archivos de Control<br/>
+(Control Files)</strong></td>
+<td>$ORACLE_BASE/oradata/ASIR/<br/>
+control01.ctl, control02.ctl</td>
+<td>Ficheros binarios leídos en la fase MOUNT. Guardan el mapa físico de la BD (rutas de datafiles y redo logs) y el SCN actual. Siempre se multiplexan. Vista: V$CONTROLFILE.</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Archivos de Datos<br/>
+(Datafiles y Tempfiles)</strong></td>
+<td>$ORACLE_BASE/oradata/ASIR/<br/>
+system01.dbf, users01.dbf...</td>
+<td>Se abren en la fase OPEN. Almacenan físicamente los bloques de tablas e índices agrupados lógicamente en Tablespaces. Vistas: V$DATAFILE y CDB_DATA_FILES.</td>
+</tr>
+<tr class="even">
+<td><strong>4. Archivos Redo Log<br/>
+(Online Redo Logs)</strong></td>
+<td>$ORACLE_BASE/oradata/ASIR/<br/>
+redo01.log, redo02.log...</td>
+<td>Bitácora circular donde escribe LGWR. Mínimo 2 grupos obligatorios. Permiten reconstruir transacciones tras un apagón. Vistas: V$LOG y V$LOGFILE.</td>
+</tr>
+<tr class="odd">
+<td><strong>5. Fichero de Claves<br/>
+(Password File)</strong></td>
+<td>$ORACLE_HOME/dbs/<br/>
+orapwasir</td>
+<td>Almacena las credenciales cifradas de usuarios con privilegios SYSDBA/SYSOPER para administración remota. Vista: V$PWFILE_USERS.</td>
+</tr>
+<tr class="even">
+<td><strong>6. Fichero Alert Log<br/>
+(Diagnóstico y Traza)</strong></td>
+<td>$ORACLE_BASE/diag/rdbms/<br/>
+asir/asir/trace/alert_asir.log</td>
+<td>Bitácora cronológica en texto plano que registra cada arranque, parada, cambio de parámetro y error interno ORA-xxxxx. Vista: V$DIAG_INFO.</td>
+</tr>
+</tbody>
+</table></div><div class="sc"><table class="box">
+
+<thead>
+<tr class="header">
+<th><strong>⚙️ Diferencia Crítica entre PFILE y SPFILE y el comando ALTER SYSTEM<br/>
+</strong>• PFILE (initasir.ora): Fichero de texto plano editable con nano/vi. Cualquier cambio exige apagar y volver a arrancar la instancia.<br/>
+• SPFILE (spfileasir.ora): Fichero binario gestionado por Oracle (por defecto). ¡NUNCA debe editarse con nano porque se corrompe! Se modifica desde SQL*Plus mediante:<br/>
+ALTER SYSTEM SET parametro = valor SCOPE = [MEMORY | SPFILE | BOTH];<br/>
+- SCOPE=MEMORY: Aplica el cambio solo en RAM; se pierde al reiniciar.<br/>
+- SCOPE=SPFILE: Escribe el cambio en el fichero binario para el próximo arranque (obligatorio para parámetros estáticos como 'processes').<br/>
+- SCOPE=BOTH: Aplica el cambio en caliente en RAM y lo guarda en el SPFILE.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table></div></div>`,a:`<div class="raw md"><p><strong>4. Arranque y Parada de la Base de Datos y Conectividad de Red</strong></p><p><strong>4.1. Las 3 Fases de Arranque de la Instancia (STARTUP)</strong></p><p>Cuando un administrador se conecta con 'sqlplus / as sysdba' y ejecuta el comando STARTUP, la base de datos atraviesa secuencialmente tres estados bien diferenciados:</p><ul>
+<li><p><strong>Fase 1 — NOMOUNT ('ORACLE instance started'):</strong> Oracle busca en $ORACLE_HOME/dbs el fichero spfileasir.ora (o initasir.ora), reserva la memoria SGA en la RAM de Linux y lanza los procesos en segundo plano (PMON, SMON, DBWn, LGWR...). Aún no se ha abierto ningún archivo de la base de datos. Solo están disponibles las vistas dinámicas en memoria (como V$INSTANCE o V$PARAMETER). Se usa para ejecutar CREATE DATABASE o recrear archivos de control.</p></li>
+<li><p><strong>Fase 2 — MOUNT ('Database mounted'):</strong> La instancia localiza y abre los Archivos de Control (.ctl) indicados en el parámetro control_files. En este punto Oracle ya conoce la lista de Datafiles y Redo Logs, pero aún no los abre para los usuarios. Permite consultar V$DATAFILE o V$LOGFILE, pero no DBA_USERS ni tablas. Se usa para activar el modo ARCHIVELOG, renombrar ficheros o realizar recuperaciones completas de desastres.</p></li>
+<li><p><strong>Fase 3 — OPEN ('Database opened'):</strong> Oracle abre y verifica la sincronización (SCN) de todos los Datafiles (.dbf) y Online Redo Logs (.log). Si la base de datos se apagó mal anteriormente, SMON ejecuta automáticamente la recuperación de instancia. El contenedor raíz (CDB$ROOT) queda abierto para conexiones.</p></li>
+<li><p><strong>Apertura de Pluggable Databases (PDBs):</strong> Al abrir el contenedor raíz, las PDBs como 'pdasir' quedan por defecto cerradas en estado MOUNTED. Para abrirlas y hacer que recuerden su estado abierto en futuros reinicios se ejecuta:<br/>
+ALTER PLUGGABLE DATABASE pdasir OPEN;<br/>
+ALTER PLUGGABLE DATABASE pdasir SAVE STATE;</p></li>
+</ul><p><strong>4.2. Los 4 Modos de Parada de la Base de Datos (SHUTDOWN)</strong></p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Modo de Parada</strong></th>
+<th><strong>Nuevas Conexiones</strong></th>
+<th><strong>Sesiones y Transacciones Activas</strong></th>
+<th><strong>Estado al Cerrar y Uso Real</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SHUTDOWN NORMAL<br/>
+(Por defecto)</strong></td>
+<td>Bloqueadas</td>
+<td>Espera indefinidamente a que todos los usuarios conectados escriban EXIT voluntariamente.</td>
+<td>BD limpia (Checkpoint completo). Rara vez usado en producción porque un solo cliente abierto bloquea el apagado.</td>
+</tr>
+<tr class="even">
+<td><strong>SHUTDOWN TRANSACTIONAL</strong></td>
+<td>Bloqueadas</td>
+<td>Espera a que terminen las transacciones en curso (COMMIT/ROLLBACK) y desconecta al usuario.</td>
+<td>BD limpia. Útil cuando no se quiere interrumpir operaciones críticas a mitad de ejecución.</td>
+</tr>
+<tr class="odd">
+<td><strong>SHUTDOWN IMMEDIATE<br/>
+(Estándar DBA)</strong></td>
+<td>Bloqueadas</td>
+<td>Cancela sentencias en curso, hace ROLLBACK automático de cambios no confirmados y desconecta a todos.</td>
+<td>BD 100% limpia y consistente: fuerza un Checkpoint completo (DBWn escribe todo a disco) y cierra ficheros.</td>
+</tr>
+<tr class="even">
+<td><strong>SHUTDOWN ABORT<br/>
+(Emergencia)</strong></td>
+<td>Cortadas en el acto</td>
+<td>Mata los procesos inmediatamente sin hacer Rollback ni volcar la memoria SGA a disco.</td>
+<td>BD INCONSISTENTE (equivale a un corte eléctrico). Obliga a SMON a hacer Instance Recovery en el próximo STARTUP.</td>
+</tr>
+</tbody>
+</table></div><p><strong>4.3. Conectividad en Red: El Listener (listener.ora) y Clientes (tnsnames.ora)</strong></p><ul>
+<li><p><strong>El demonio Listener (tnslsnr) y listener.ora:</strong> Ubicado en el servidor ($ORACLE_HOME/network/admin/listener.ora) y configurado con el asistente gráfico 'netca'. Escucha peticiones entrantes en el puerto TCP 1521 y las redirige a un Server Process dedicado de la instancia. Se administra desde Linux con 'lsnrctl start', 'lsnrctl stop', 'lsnrctl status' y 'lsnrctl reload'.</p></li>
+<li><p><strong>Resolución de nombres en el cliente (tnsnames.ora):</strong> Ubicado en $ORACLE_HOME/network/admin/tnsnames.ora. Funciona como una agenda de contactos que traduce un alias corto (ej. PDASIR) en el protocolo (TCP), IP del servidor (HOST), puerto (1521) y nombre del servicio (SERVICE_NAME = pdasir). Se verifica desde Linux con 'tnsping PDASIR' y permite conectar con 'sqlplus usuario/clave@PDASIR' o mediante Easy Connect ('sqlplus system@localhost:1521/pdasir').</p></li>
+</ul><p><strong>5. Estructura del Diccionario de Datos</strong></p><p>El Diccionario de Datos es el catálogo interno y corazón de Oracle. Almacena todos los metadatos de la base de datos: definiciones de tablas, columnas, vistas, usuarios, roles, privilegios, asignación de espacio en tablespaces y estadísticas del optimizador. Reside físicamente en los tablespaces SYSTEM y SYSAUX, pertenece al esquema SYS y se construye durante la creación de la base de datos ejecutando los scripts catalog.sql y catproc.sql.</p><div class="sc"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Familia / Prefijo</strong></th>
+<th><strong>Origen de los Datos y Estado Requerido</strong></th>
+<th><strong>Alcance de Seguridad y Ejemplos Clave para el DBA</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>USER_*</strong></td>
+<td>Tablas base en disco (SYSTEM). Requiere BD en estado OPEN.</td>
+<td>Muestra únicamente los objetos cuyo propietario es el usuario actual de la sesión. Ejemplos: USER_TABLES, USER_TAB_COLUMNS, USER_OBJECTS, USER_USERS.</td>
+</tr>
+<tr class="even">
+<td><strong>ALL_*</strong></td>
+<td>Tablas base en disco (SYSTEM). Requiere BD en estado OPEN.</td>
+<td>Muestra los objetos propios del usuario actual MÁS los objetos de otros esquemas sobre los que tiene privilegios concedidos. Ejemplos: ALL_TABLES, ALL_VIEWS.</td>
+</tr>
+<tr class="odd">
+<td><strong>DBA_*</strong></td>
+<td>Tablas base en disco (SYSTEM). Requiere BD en estado OPEN.</td>
+<td>Muestra TODOS los objetos y estructuras del contenedor actual (requiere rol DBA o SYSDBA). Ejemplos: DBA_USERS, DBA_DATA_FILES, DBA_TABLESPACES, DBA_ROLES.</td>
+</tr>
+<tr class="even">
+<td><strong>CDB_*</strong></td>
+<td>Tablas base en disco (Multitenant). Requiere BD en estado OPEN.</td>
+<td>Consultado desde CDB$ROOT, muestra los objetos de todos los contenedores (raíz y PDBs abiertas), identificados por la columna CON_ID. Ejemplo: CDB_PDBS, CDB_USERS.</td>
+</tr>
+<tr class="odd">
+<td><strong>V$ (Vistas de Rendimiento Dinámico)</strong></td>
+<td>Estructuras de memoria RAM (SGA) y Archivos de Control (.ctl). Accesibles en NOMOUNT / MOUNT / OPEN.</td>
+<td>Actualizadas en tiempo real por el motor para monitorizar rendimiento, memoria, sesiones y ficheros físicos. Ejemplos: V$INSTANCE, V$DATABASE, V$PARAMETER, V$SGA, V$BGPROCESS, V$SESSION, V$DATAFILE, V$LOGFILE.</td>
+</tr>
+</tbody>
+</table></div><p><strong>💻 Resumen de Consultas Esenciales al Diccionario de Datos en SQL*Plus</strong></p><div class="sc"><table class="box sqlbox">
+
+<thead>
+<tr class="header">
+<th>-- Consultas esenciales al Diccionario de Datos que todo DBA debe dominar:<br/>
+-- 1. Consultar el catálogo general del diccionario (explica para qué sirve cada vista):<br/>
+SELECT table_name, comments FROM dictionary WHERE table_name LIKE '%USERS%';<br/>
+<br/>
+-- 2. Ver en qué contenedor estamos trabajando y cambiar entre CDB$ROOT y la PDB:<br/>
+SHOW CON_NAME;<br/>
+SHOW PDBS;<br/>
+ALTER SESSION SET CONTAINER = pdasir;<br/>
+<br/>
+-- 3. Auditar los ficheros físicos de datos (Datafiles) y su tamaño en MB:<br/>
+SELECT tablespace_name, file_name, bytes/1024/1024 AS tamano_mb FROM dba_data_files;<br/>
+<br/>
+-- 4. Auditar las sesiones de usuarios conectadas en tiempo real (Vista Dinámica V$):<br/>
+SELECT sid, serial#, username, status, machine, program FROM v$session WHERE username IS NOT NULL;</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table></div></div>`};
+const $=s=>document.querySelector(s),sh=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+let S={done:{},known:{},wrong:{},best:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem('bbdd_ex2')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('bbdd_ex2',JSON.stringify(S))}catch(e){}};
+let V='th',TP='all',FP=false,FI=0,FL=false,tm=null;
+const tops=()=>T.filter(t=>TP==='all'||t.id===TP);
+const VS=[['th','Resumen'],['ff','En Bruto'],['fc','Flashcards'],['ts','Test'],['ex','Examen'],['rv','Repaso'],['gl','Glosario'],['ch','Chuleta']];
+function prog(){let n=T.length,k=T.filter(t=>S.done[t.id]).length;T.forEach(t=>{n+=t.c.length;t.c.forEach((_,j)=>{if(S.known[t.id+'c'+j]===1)k++})});const p=Math.round(100*k/n);$('#pg').style.width=p+'%';$('#pt').textContent=p+' % completado · '+Object.keys(S.wrong).length+' preguntas por repasar'}
+function nav(){$('#nv').innerHTML=VS.map(v=>`<button class="${V===v[0]?'on':''}" onclick="V='${v[0]}';clearInterval(tm);R()">${v[1]}</button>`).join('');$('#tp').innerHTML=[['all','Todos']].concat(T.map(t=>[t.id,t.n])).map(t=>`<button class="${TP===t[0]?'on':''}" onclick="TP='${t[0]}';FI=0;FL=false;clearInterval(tm);R()">${t[1]}</button>`).join('');prog()}
+function R(){nav();const m=$('#m');m.innerHTML='';m.classList.toggle('wide',V==='ff');({th,fc,ts,ex,dv,rv,gl,ch,ff})[V](m);window.scrollTo(0,0)}
+function th(m){tops().forEach(t=>{m.insertAdjacentHTML('beforeend',`<h2>${t.n}</h2>`+t.th.map(s=>`<details><summary>${s[0]}</summary><div>${s[1]}</div></details>`).join('')+`<button onclick="S.done['${t.id}']=!S.done['${t.id}'];save();R()">${S.done[t.id]?'✓ Tema completado (quitar)':'Marcar tema como completado'}</button>`)});ces();va();cl('ib');cl('pr');cl('sd')}
+function ces(){const a=$('#cs');if(!a)return;const n=+$('#cn').value||0;$('#co').textContent=a.value.replace(/[a-zñ]/gi,c=>{const A='abcdefghijklmnñopqrstuvwxyz';const i=A.indexOf(c.toLowerCase());return i<0?c:A[(i+n)%A.length]})}
+function va(){const w=$('#w');if(!w)return;$('#vo').textContent=Math.ceil(w.value/0.7);$('#vo2').textContent=Math.round($('#am').value*230)}
+function cards(){return tops().flatMap(t=>t.c.map((c,j)=>({k:t.id+'c'+j,t:t.n,q:c[0],a:c[1]}))).filter(c=>!FP||S.known[c.k]!==1)}
+function fc(m){const L=cards();if(FI>=L.length)FI=0;m.innerHTML=`<label><input type="checkbox" ${FP?'checked':''} onchange="FP=this.checked;FI=0;R()"> Solo pendientes</label>`;if(!L.length){m.innerHTML+='<div class="card">🎉 ¡Todas dominadas!</div>';return}const c=L[FI];m.innerHTML+=`<p class="tag">${FI+1}/${L.length} · ${c.t}</p><div class="card fc ${FL?'back':''}" tabindex="0" role="button" onclick="FL=!FL;R()" onkeydown="if(event.key==' '||event.key=='Enter'){event.preventDefault();FL=!FL;R()}">${FL?c.a:'<b>'+c.q+'</b>'}</div><div class="row"><button onclick="mk('${c.k}',1)">✓ La sabía</button><button onclick="mk('${c.k}',0)">↻ Repasar</button></div><p class="tag">Pulsa la tarjeta (o Enter) para voltearla.</p>`}
+function mk(k,v){S.known[k]=v;save();FI++;FL=false;R()}
+function qs(){return tops().flatMap(t=>t.q.map((q,j)=>({k:t.id+j,t:t.n,q})))}
+function ts(m){m.innerHTML=`<div class="card"><p>${qs().length} preguntas, con feedback inmediato.</p><button class="on" onclick="quiz(sh(qs()),true)">Empezar test</button></div>`}
+function ex(m){m.innerHTML=`<div class="card"><p>Examen tipo test con preguntas aleatorias de los temas seleccionados arriba. Sin feedback hasta el final.</p><label>Nº de preguntas: <input type="number" id="en" value="15" min="3" max="40" style="width:80px"></label> <label><input type="checkbox" id="ec" checked> Cronómetro</label><p><button class="on" onclick="quiz(sh(qs()).slice(0,+$('#en').value||15),false,$('#ec').checked)">Empezar examen</button></p></div>`}
+function quiz(L,fb,clock){const m=$('#m');let i=0,res=[],t0=Date.now();clearInterval(tm);
+function head(){return `<p class="tag">Pregunta ${i+1}/${L.length}${clock?' · ⏱ <span id="tc"></span>':''}</p>`}
+if(clock)tm=setInterval(()=>{const e=$('#tc');if(e){const s=Math.floor((Date.now()-t0)/1000);e.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}},500);
+function rec(it,ok){res.push({it,ok});if(!ok)S.wrong[it.k]=2;else if(S.wrong[it.k]&&!--S.wrong[it.k])delete S.wrong[it.k];save();prog()}
+function nxt(){i++;i<L.length?show():end()}
+function show(){const it=L[i],q=it.q;if(q[2]==='o')return ord(it);
+m.innerHTML=head()+`<div class="card"><b>${q[0]}</b>`+q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')+'<div id="fb"></div></div>';
+m.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const j=+b.dataset.j,ok=j===q[2];rec(it,ok);if(!fb)return nxt();m.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(+x.dataset.j===q[2])x.classList.add('ok')});if(!ok)b.classList.add('ko');$('#fb').innerHTML=`<div class="fb ${ok?'ok':'ko'}"><b>${ok?'¡Correcto!':'Incorrecto.'}</b> ${q[3]}</div><p><button class="on" id="nx">Siguiente →</button></p>`;$('#nx').onclick=nxt;$('#nx').focus()})}
+function ord(it){const q=it.q,pool=sh(q[1]),ch=[];function d(){m.innerHTML=head()+`<div class="card"><b>${q[0]}</b><p class="tag">Pulsa los pasos en el orden correcto.</p><ol>${ch.map(x=>`<li>${x}</li>`).join('')}</ol>`+pool.filter(x=>!ch.includes(x)).map(x=>`<button class="opt" data-v="${x}">${x}</button>`).join('')+'<div id="fb"></div></div>';m.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ch.push(b.dataset.v);if(ch.length<pool.length)return d();const ok=ch.join('|')===q[1].join('|');rec(it,ok);if(!fb)return nxt();d();m.querySelectorAll('.opt').forEach(x=>x.disabled=true);$('#fb').innerHTML=`<div class="fb ${ok?'ok':'ko'}"><b>${ok?'¡Correcto!':'Orden incorrecto.'}</b> Orden: ${q[1].join(' → ')}. ${q[3]}</div><p><button class="on" id="nx">Siguiente →</button></p>`;$('#nx').onclick=nxt})}d()}
+function end(){clearInterval(tm);const ok=res.filter(r=>r.ok).length,by={};res.forEach(r=>{by[r.it.t]=by[r.it.t]||[0,0];by[r.it.t][1]++;if(r.ok)by[r.it.t][0]++});const n=(10*ok/res.length).toFixed(1);
+m.innerHTML=`<div class="card"><div class="big">${n} / 10</div><p>${ok} de ${res.length} aciertos${clock?' · '+Math.round((Date.now()-t0)/1000)+' s':''}.</p><table><tr><th>Tema</th><th>Aciertos</th></tr>${Object.entries(by).map(([k,v])=>`<tr><td>${k}</td><td>${v[0]}/${v[1]}</td></tr>`).join('')}</table></div>`+(res.some(r=>!r.ok)?'<h3>Para repasar</h3>'+res.filter(r=>!r.ok).map(r=>`<div class="card"><b>${r.it.q[0]}</b><p>${r.it.q[2]==='o'?r.it.q[1].join(' → '):'✓ '+r.it.q[1][r.it.q[2]]}</p><p class="tag">${r.it.q[3]}</p></div>`).join(''):'<p>🎉 Sin fallos.</p>');}
+show()}
+function dv(m){m.innerHTML='<p>La mitad del examen es de desarrollo: escribe tu respuesta y contrasta con los puntos clave.</p>';D.filter(d=>TP==='all'||d[0]===TP).forEach((d,i)=>{m.insertAdjacentHTML('beforeend',`<details><summary>${d[1]}</summary><div><textarea rows="5" placeholder="Escribe aquí tu respuesta…"></textarea><p><b>Puntos clave</b> (marca los que has cubierto):</p>${d[2].map(p=>`<label style="display:block"><input type="checkbox" onchange="dc(this)"> ${p}</label>`).join('')}<p class="tag dr"></p></div></details>`)})}
+function dc(e){const d=e.closest('div'),c=d.querySelectorAll('input:checked').length,n=d.querySelectorAll('input').length;d.querySelector('.dr').textContent=`Cubiertos ${c}/${n}`+(c<n?' · repasa los que faltan':' · ¡completo!')}
+function rv(m){const w=qs().filter(x=>S.wrong[x.k]),pc=T.flatMap(t=>t.c.map((c,j)=>({k:t.id+'c'+j,q:c[0],a:c[1]}))).filter(c=>S.known[c.k]===0);
+m.innerHTML=`<h3>Preguntas falladas (${w.length})</h3>`+(w.length?`<button class="on" onclick="quiz(sh(qs().filter(x=>S.wrong[x.k])),true)">Practicar fallos</button>`+w.map(x=>`<div class="card">${x.q[0]}<p class="tag">${x.t}</p></div>`).join(''):'<p>Ninguna. Se eliminan al acertarlas dos veces.</p>')+`<h3>Flashcards por repasar (${pc.length})</h3>`+pc.map(c=>`<details><summary>${c.q}</summary><div>${c.a}</div></details>`).join('')}
+function gl(m){m.innerHTML='<input type="search" id="gq" placeholder="Buscar término…" aria-label="Buscar en el glosario"><div id="gr"></div>';const f=()=>{const q=$('#gq').value.toLowerCase();$('#gr').innerHTML=T.flatMap(t=>t.c.map(c=>[t.n,c[0],c[1]])).filter(c=>(c[1]+c[2]).toLowerCase().includes(q)).map(c=>`<div class="card"><b>${c[1]}</b> <span class="tag">${c[0]}</span><br>${c[2]}</div>`).join('')};$('#gq').oninput=f;f()}
+function ff(m){m.insertAdjacentHTML('beforeend','<p class="tag">Documento original sin resumir (texto copiable, con sus tablas y avisos), dividido según el tema seleccionado arriba.</p>');tops().forEach(t=>m.insertAdjacentHTML('beforeend',`<h2>${t.n}</h2>${FF[t.id]}`))}
+function ch(m){tops().forEach(t=>m.insertAdjacentHTML('beforeend',`<div class="card"><h3>${t.n}</h3><ul>${t.s.map(x=>`<li>${x}</li>`).join('')}</ul></div>`))}
+try{if(localStorage.getItem('asir_theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}
+$('#th').onclick=()=>{const r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('asir_theme',t)}catch(e){}};
+$('#rs').onclick=()=>{if(confirm('¿Borrar todo el progreso?')){S={done:{},known:{},wrong:{},best:{}};save();R()}};
+R();
+</script></body></html>
