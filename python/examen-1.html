@@ -38,7 +38,7 @@ code{background:var(--acs);padding:0 4px;border-radius:4px;font-size:.9em}pre co
 <div class="pb" role="progressbar" aria-label="Progreso global"><i id="pg" style="width:0"></i></div><div class="tag" id="pt"></div><nav id="nv"></nav></header>
 <main id="m"></main>
 <script>
-const $=s=>document.querySelector(s),sh=a=>[...a].sort(()=>Math.random()-.5),esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;'),hl=c=>esc(c).replace(/(#.*)|("""[\s\S]*?"""|[fF]?"(?:\\.|[^"\\\n])*"|[fF]?'(?:\\.|[^'\\\n])*')|\b(def|if|elif|else|while|for|in|not|and|or|is|return|break|continue|try|except|import|from|as|class|pass|lambda|with|finally|raise)\b|\b(True|False|None)\b|\b(print|input|int|float|str|bool|len|range|type|list|round|sum|enumerate|eval|id|dict|set|sqrt)\b|\b(\d+\.?\d*)\b|\b([A-Za-z_]\w*)(?=\()/g,(m,cm,st,kw,cn,bi,nu,fn)=>cm?'<span class="c">'+m+'</span>':st?'<span class="s">'+m+'</span>':kw?'<span class="k">'+m+'</span>':cn?'<span class="v">'+m+'</span>':bi?'<span class="b2">'+m+'</span>':nu?'<span class="n">'+m+'</span>':'<span class="f">'+m+'</span>'),P=x=>'<pre><code>'+hl(x)+'</code></pre>',R=(s,...v)=>(s&&s.raw)?String.raw(s,...v):render();
+const $=s=>document.querySelector(s),sh=a=>[...a].sort(()=>Math.random()-.5),esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;'),hl=c=>esc(c).replace(/(#.*)|("""[\s\S]*?"""|[fF]?"(?:\\.|[^"\\\n])*"|[fF]?'(?:\\.|[^'\\\n])*')|\b(def|if|elif|else|while|for|in|not|and|or|is|return|break|continue|try|except|import|from|as|class|pass|lambda|with|finally|raise)\b|\b(True|False|None)\b|\b(print|input|int|float|str|bool|len|range|type|list|round|sum|enumerate|eval|id|dict|set|sqrt)\b|\b(\d+\.?\d*)\b|\b([A-Za-z_]\w*)(?=\()/g,(m,cm,st,kw,cn,bi,nu,fn)=>cm?'<span class="c">'+m+'</span>':st?'<span class="s">'+m+'</span>':kw?'<span class="k">'+m+'</span>':cn?'<span class="v">'+m+'</span>':bi?'<span class="b2">'+m+'</span>':nu?'<span class="n">'+m+'</span>':'<span class="f">'+m+'</span>'),P=x=>'<pre><code>'+hl(x.replace(/\n(?=# (?:Ejercicio \d|for \d|range \d|Saludo|\d\. ))/g,'\n\n'))+'</code></pre>',R=(s,...v)=>(s&&s.raw)?String.raw(s,...v):render();
 const U=['UT1 · Fundamentos','UT2 · Condicionales, bucles y excepciones','UT3 · Funciones'];
 const X=t=>`<div class="extra">${t}</div>`;
 /* [unidad, e=ejemplo|x=ejercicio, título, html] */
@@ -361,14 +361,77 @@ def calcular_raiz_cuadrada(x):
         print("Error: valor no numérico o número negativo")
 calcular_raiz_cuadrada(16)   # 4.0
 calcular_raiz_cuadrada(-4)   # Error`)}${X('El enunciado decía <code>ZeroDivisionError</code> para raíces de negativos, pero <code>math.sqrt(-1)</code> lanza <code>ValueError</code>.')}`],
-[1,'x','Proyectos finales',`${P(R`# 1. Calculadora segura (la mía, no repetida aquí)
+[1,'x','Proyectos finales',`${P(R`# 1. Calculadora segura
 # Pide al usuario dos números y una operación (+, -, *, /). Repite hasta que
 # el usuario quiera salir. Controla la división entre cero y la
 # introducción de valores no numéricos.
-# 2. Contador con control de errores (el mío, no repetido aquí)
+print("=== Calculadora segura ===\n")
+
+while True:
+    try:
+        num1 = float(input("Primer número: "))
+        num2 = float(input("Segundo número: "))
+    except ValueError:
+        print("Error: debes introducir valores numéricos.\n")
+        continue
+
+    operacion = input("Operación (+, -, *, /): ").strip()
+
+    try:
+        if operacion == "+":
+            resultado = num1 + num2
+        elif operacion == "-":
+            resultado = num1 - num2
+        elif operacion == "*":
+            resultado = num1 * num2
+        elif operacion == "/":
+            resultado = num1 / num2
+        else:
+            print("Operación no válida. Usa +, -, * o /.\n")
+            continue
+
+        print(f"Resultado: {num1} {operacion} {num2} = {resultado}\n")
+
+    except ZeroDivisionError:
+        print("Error: no se puede dividir entre cero.\n")
+
+    otra = input("¿Quieres hacer otra operación? (s/n): ").strip().lower()
+    if otra != "s":
+        print("¡Hasta luego!")
+        break
+
+# 2. Contador con control de errores
 # Pide un número entero positivo n y cuenta desde 1 hasta n. Si el usuario
 # introduce algo que no sea entero o menor que 1, se pide de nuevo. Si se
 # interrumpe con Ctrl + C, el programa se despide limpiamente.
+print("=== Contador ===")
+print("Pulsa Ctrl + C para salir en cualquier momento.\n")
+
+try:
+    while True:
+        entrada = input("Introduce un número entero positivo n: ")
+
+        try:
+            n = int(entrada)
+        except ValueError:
+            print("Error: debes introducir un número entero.\n")
+            continue
+
+        if n < 1:
+            print("Error: el número debe ser mayor o igual que 1.\n")
+            continue
+
+        break
+
+    print()
+    for i in range(1, n + 1):
+        print(i)
+
+    print("\n¡Fin de la cuenta!")
+
+except KeyboardInterrupt:
+    print("\n\nPrograma interrumpido. ¡Hasta luego!")
+    
 # 3. Simulador de ahorro mensual (resuelto por Claude)
 # Pide un saldo inicial y una cantidad a ahorrar cada mes. Muestra el saldo
 # mes a mes durante un año. Controla errores de tipo o de entrada no numérica.
