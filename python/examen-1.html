@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python · Examen 1</title>
+<style>
+:root{--bg:#f3f9f0;--sf:#fff;--tx:#14231a;--mu:#5a6b5f;--bd:#d3e3cd;--ac:#1e5b34;--acs:#e1f0dc;--ok:#1b7a3a;--oks:#e3f4e8;--ko:#b3261e;--kos:#fde7e5;color-scheme:light;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#0f1710;--sf:#162019;--tx:#e9f1ea;--mu:#9bb0a1;--bd:#263629;--ac:#5fd085;--acs:#1a2d20;--ok:#5fd085;--oks:#16301e;--ko:#ff7066;--kos:#3a1f1d;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:110px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--bd);padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+h1{font-size:1.05rem;margin:0;flex:1;color:var(--ac)}
+button{font:inherit;color:inherit;background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--ac)}button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.pb{height:6px;background:var(--bd);border-radius:4px;margin:8px 0 2px;overflow:hidden}.pb i{display:block;height:100%;background:var(--ac);transition:width .4s}
+nav{overflow-x:auto;white-space:nowrap;padding-bottom:2px}nav button{margin-right:4px}
+main{max-width:820px;margin:0 auto;padding:14px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:10px 0}
+details{background:var(--sf);border:1px solid var(--bd);border-radius:10px;margin:8px 0;padding:2px 14px}
+summary{cursor:pointer;font-weight:600;padding:10px 0}details[open]>summary{color:var(--ac)}details>div{padding-bottom:10px}
+.b{font-size:.7rem;border-radius:6px;padding:1px 7px;margin-right:6px;background:var(--acs);color:var(--ac);border:1px solid var(--ac)}.b.x{background:transparent}
+.extra{border-left:4px solid #d19a00;background:rgba(209,154,0,.12);padding:8px 12px;border-radius:6px;margin:8px 0}.extra::before{content:"Nota extra · ";font-weight:700;color:#b07d00}
+mark{background:var(--acs);color:inherit;padding:0 3px;border-radius:3px;font-weight:600}
+pre{background:#232323;color:#d4d4d4;border:1px solid var(--bd);padding:10px 12px;border-radius:8px;overflow-x:auto;font:.84rem/1.5 ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
+code{background:var(--acs);padding:0 4px;border-radius:4px;font-size:.9em}pre code{background:none;padding:0}
+.k{color:#d8a0e0}.s{color:#ce9178}.c{color:#7ca668;font-style:italic}.n{color:#b5cea8}.f{color:#dcdcaa}.b2{color:#4ec9b0}.v{color:#6cb6ff}
+
+.opt{display:block;width:100%;text-align:left;margin:6px 0}.opt.ok{background:var(--oks);border-color:var(--ok)}.opt.ko{background:var(--kos);border-color:var(--ko);animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fc{min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.1rem;cursor:pointer}.fc.back{background:var(--acs);border-color:var(--ac)}
+.tag{font-size:.75rem;color:var(--mu)}input[type=search],input[type=number],textarea{width:100%;font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);color:var(--tx)}
+.fb{padding:8px 12px;border-radius:8px;margin-top:8px}.fb.ok{background:var(--oks)}.fb.ko{background:var(--kos)}
+.big{font-size:2rem;font-weight:700;color:var(--ac)}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--bd);padding:5px 8px;text-align:left}th{background:var(--acs)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><div class="row"><h1>🐍 Python · Examen 1</h1><button id="th" aria-label="Cambiar modo claro u oscuro">◐</button><button id="rs" aria-label="Borrar progreso">↺</button></div>
+<div class="pb" role="progressbar" aria-label="Progreso global"><i id="pg" style="width:0"></i></div><div class="tag" id="pt"></div><nav id="nv"></nav></header>
+<main id="m"></main>
+<script>
+const $=s=>document.querySelector(s),sh=a=>[...a].sort(()=>Math.random()-.5),esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;'),hl=c=>esc(c).replace(/(#.*)|("""[\s\S]*?"""|[fF]?"(?:\\.|[^"\\\n])*"|[fF]?'(?:\\.|[^'\\\n])*')|\b(def|if|elif|else|while|for|in|not|and|or|is|return|break|continue|try|except|import|from|as|class|pass|lambda|with|finally|raise)\b|\b(True|False|None)\b|\b(print|input|int|float|str|bool|len|range|type|list|round|sum|enumerate|eval|id|dict|set|sqrt)\b|\b(\d+\.?\d*)\b|\b([A-Za-z_]\w*)(?=\()/g,(m,cm,st,kw,cn,bi,nu,fn)=>cm?'<span class="c">'+m+'</span>':st?'<span class="s">'+m+'</span>':kw?'<span class="k">'+m+'</span>':cn?'<span class="v">'+m+'</span>':bi?'<span class="b2">'+m+'</span>':nu?'<span class="n">'+m+'</span>':'<span class="f">'+m+'</span>'),P=x=>'<pre><code>'+hl(x)+'</code></pre>',R=(s,...v)=>(s&&s.raw)?String.raw(s,...v):render();
+const U=['UT1 · Fundamentos','UT2 · Condicionales, bucles y excepciones','UT3 · Funciones'];
+const X=t=>`<div class="extra">${t}</div>`;
+/* [unidad, e=ejemplo|x=ejercicio, título, html] */
+const TH=[
+[0,'e','Estructura de un programa',`<p>Variables, función (<code>def</code>), condicional y <mark>indentación</mark>: el bloque de código se define por la sangría, no por llaves.</p>${P(R`x = 5              # variable entera
+def suma(a, b):    # definición de función
+    return a + b   # bloque indentado
+if x < 10:         # estructura de control
+    print("x es menor que 10")
+else:
+    print("x es mayor o igual")
+vocales = {"a","e","i","o","u"}   # conjunto
+print("a" in vocales)       # True  (pertenencia)
+print("y" not in vocales)   # True`)}`],
+[0,'e','print()',`<p><code>sep</code> separa los elementos y <code>end</code> define el final de línea (por defecto <code>\\n</code>).</p>${P(R`print("Python", "es", "genial")        # Python es genial
+print("Python", "es", sep="-")           # Python-es
+print("Una línea", end="")               # sin salto de línea
+print('Comillas "dobles" dentro')        # comillas simples fuera
+print("Escape: \"hola\"")                # carácter de escape \
+print("""Triple comilla con "pulgada" """)
+import os, subprocess
+subprocess.run("cls" if os.name == "nt" else "clear", shell=True)  # limpiar consola`)}${X('<code>shell=True</code> abre una shell del SO y puede permitir inyección de comandos si el texto viene del usuario.')}`],
+[0,'e','Tipos y casting',`<p>Tipos: <code>int</code>, <code>float</code>, <code>complex</code>, <code>str</code>, <code>bool</code>, <code>NoneType</code>. <code>type()</code> devuelve el tipo; el <mark>casting</mark> convierte entre ellos.</p>${P(R`print(type(10), type(3.14), type(1+2j))   # int float complex
+print(type("123"), type(True), type(None))
+print(2 + int("100"))        # 102
+print("100" + str(2))        # "1002"
+print(int(3.1416))           # 3 (se trunca)
+print(bool(0), bool(-1))     # False True
+print(bool(""), bool(" "), bool("False"))  # False True True
+print(round(2.51))           # 3
+# int("Hola")  -> ValueError`)}${X('<code>round(2.5)</code> da 2 (Python redondea .5 al par más cercano).')}`],
+[0,'e','Variables',`<p>Python tiene tipado <mark>dinámico</mark> (el tipo puede cambiar) y <mark>fuerte</mark> (no mezcla tipos sin convertir).</p>${P(R`age = 32
+age = 39               # reasignar
+name = "midu"; name = 32   # dinámico: ahora es int
+# print(10 + "2")      # TypeError (tipado fuerte)
+print(f"Hola {name}, el año que viene {age + 1}")  # f-string
+mi_variable = "ok"     # snake_case (recomendado)
+MI_CONSTANTE = 3.14    # UPPER_CASE = constante
+# 1abc, mi-var, "mi var", True  -> nombres NO válidos
+logged: bool = True    # anotación de tipo (opcional)`)}<p>Palabras reservadas: <code>if else elif while for break continue def return try except class import in is and or not None True False</code>…</p>`],
+[0,'e','input()',`<p><code>input()</code> siempre devuelve un <mark>str</mark>.</p>${P(R`nombre = input("¿Cómo te llamas?\n")
+edad = int(input("¿Edad?\n"))      # convertir a número
+pais, ciudad = input("País y ciudad: ").split()  # separa por espacios`)}${X('<code>.split()</code> separa por espacios. Para separar por comas usa <code>.split(",")</code>.')}`],
+[0,'e','Operadores',`${P(R`print(24 + 4.25, 8 - 3)   # 28.25 5
+print(8 / 3)    # 2.666... división real
+print(8 // 3)   # 2 división entera
+print(8 % 3)    # 2 resto
+print(2 ** 4)   # 16 potencia
+n = 4; n += 2; n *= 5; n /= 3   # 6, 30, 10.0
+print(5 > 3, 4 <= 4, 3 == 5, 5 != 3)  # True True False True`)}`],
+[0,'e','Valor vs referencia',`<p>Los enteros son <mark>inmutables</mark>: reasignar no cambia el objeto, hace que la variable apunte a otro. Los enteros pequeños (−5 a 256) se reutilizan (internados). Las listas son <mark>mutables</mark>: dos variables pueden apuntar al mismo objeto.</p>${P(R`x = 10
+y = x
+print(x is y, id(x) == id(y))   # True True (mismo objeto)
+y = 9
+print(x is y)                   # False (y apunta a otro objeto)
+lista1 = [1, 2, 3]
+lista2 = lista1                 # misma lista, no una copia
+lista2.append(4)
+print(lista1)                   # [1, 2, 3, 4]
+print(lista1 is lista2)         # True`)}${X('Corrección: el comentario original decía que se "crea una copia" de 10; en realidad x e y comparten el mismo objeto.')}`],
+[0,'x','Ejercicios UT1 (1-5)',`${P(R`# Ejercicio 1: Imprimir mensajes
+# Escribe un programa que imprima tu nombre y tu ciudad en líneas separadas.
+print("Mi nombre es Pablo\nSoy de Granada")
+# Ejercicio 2: Muestra los tipos de datos de las siguientes variables.
+# Usa type() para determinar el tipo de cada una:
+# a = 15, b = 3.14159, c = 'Hola mundo', d = True, e = None
+a, b, c, d, e = 15, 3.14159, "Hola mundo", True, None
+print(type(a), type(b), type(c), type(d), type(e))
+# Ejercicio 3: Casting de tipos
+# Convierte la cadena '12345' a un entero y luego a un float.
+# Convierte el float 3.99 a un entero. ¿Qué ocurre?
+a = "12345"
+print(int(a), float(a))     # 12345 12345.0
+print(int(3.99))            # 3 (se trunca)
+# Ejercicio 4: Variables (resuelto por Claude)
+# Crea variables para tu nombre, edad y altura. Usa f-strings para imprimir una presentación:
+# 'Hola! Me llamo midudev y tengo 39 años, mido 1.70 metros'
+nombre, edad, altura = "Pablo", 20, 1.75
+print(f"Hola! Me llamo {nombre} y tengo {edad} años, mido {altura} metros")
+# Ejercicio 5: Números (corregido)
+# 1. Crea una variable con el número PI (sin asignar una variable)
+# 2. Redondea el número con round()
+# 3. Haz la división entera entre el número que te salió y el número 2
+# 4. El resultado debería ser 1
+import math
+rpi = round(math.pi)        # 3
+print(rpi // 2)             # 1`)}${X('Ej. 5: mi código hacía <code>rpi/pi</code>; el enunciado pide <code>rpi // 2</code> = 1. Ej. 3: la línea suelta <code>int(b)</code> sobra. Ej. 4 resuelto por Claude.')}`],
+[1,'e','if / elif / else',`<p>Solo se ejecuta el <mark>primer</mark> bloque cuyo condicional sea verdadero. Operadores lógicos: <code>and</code>, <code>or</code>, <code>not</code>.</p>${P(R`nota = 5
+if nota >= 9: print("Sobresaliente")
+elif nota >= 7: print("Notable")
+elif nota >= 5: print("Aprobado")     # <- entra aquí
+else: print("Suspenso")
+edad, carnet = 16, True
+if edad >= 18 and carnet: print("Puedes conducir")
+if not False: print("not niega")
+# Valores "falsos": 0, "", None, [] ; el resto es True
+if 5: print("5 es True")
+es_tres = (3 == 3)     # == compara, = asigna
+msg = "Mayor" if edad >= 18 else "Menor"   # ternaria`)}`],
+[1,'e','Booleanos',`${P(R`print(5 > 3, 5 == 5, 5 != 3, 5 <= 3)  # True True True False
+print("manzana" < "pera")   # True (orden alfabético)
+print("Hola" == "hola")     # False (distingue mayúsculas)
+print(True and False)       # False
+print(True or False)        # True
+print(not True)             # False`)}<table><tr><th>A</th><th>B</th><th>and</th><th>or</th></tr><tr><td>T</td><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td><td>T</td></tr><tr><td>F</td><td>T</td><td>F</td><td>T</td></tr><tr><td>F</td><td>F</td><td>F</td><td>F</td></tr></table>`],
+[1,'e','Bucle while',`<p>Repite mientras la condición sea verdadera. Hay que modificar la variable para evitar un bucle infinito. <code>break</code> sale, <code>continue</code> salta a la siguiente vuelta, y el <code>else</code> se ejecuta si el bucle acaba <mark>sin break</mark>.</p>${P(R`c = 0
+while c <= 5:
+    print(c)
+    c += 1
+while True:            # infinito controlado
+    c += 1
+    if c == 10: break
+c = 0
+while c < 10:
+    c += 1
+    if c % 2 == 0: continue    # salta los pares
+    print(c)                   # 1 3 5 7 9
+else:
+    print("Terminó sin break")
+numero = -1                    # validar entrada
+while numero < 0:
+    try: numero = int(input("Número positivo: "))
+    except ValueError: print("Debe ser un número")`)}`],
+[1,'e','Bucle for, range y list comprehension',`<p><code>for</code> recorre cualquier iterable. <code>range(fin)</code>, <code>range(ini, fin)</code> y <code>range(ini, fin, paso)</code>: el fin <mark>no se incluye</mark>.</p>${P(R`for f in ["manzana", "pera"]: print(f)
+for ch in "midu": print(ch)
+for i, v in enumerate(["a", "b"]): print(i, v)   # 0 a / 1 b
+for n in range(5): ...           # 0..4
+for n in range(5, 10): ...       # 5..9
+for n in range(10, 0, -1): ...   # 10..1 (paso negativo)
+for _ in range(5): print("x")    # repetir 5 veces
+list(range(3))                   # [0, 1, 2]
+[a.upper() for a in ["gato", "pez"]]       # ['GATO', 'PEZ']
+[n for n in [1,2,3,4,5,6] if n % 2 == 0]   # [2, 4, 6]`)}`],
+[1,'e','Excepciones: try / except',`<p>Capturan errores en tiempo de ejecución para que el programa no se detenga.</p>${P(R`try:
+    10 / 0
+except ZeroDivisionError:       # división entre cero
+    print("No se puede dividir entre cero")
+try: [1, 2, 3][10]
+except IndexError: print("Índice fuera de rango")
+try: {"a": 1}["z"]
+except KeyError: print("Clave inexistente")
+try: 15 + "20"
+except TypeError: print("No se suma int con str")
+try: int("abc")
+except ValueError: print("No es un número")`)}`],
+[1,'x','Ejercicios if',`${P(R`# Ejercicio 1: Determinar el mayor de dos números
+# Pide al usuario que introduzca dos números y muestra un mensaje
+# indicando cuál es mayor o si son iguales.
+n1 = int(input("Número 1: ")); n2 = int(input("Número 2: "))
+if n1 > n2: print("El 1 es mayor")
+elif n1 < n2: print("El 2 es mayor")
+else: print("Son iguales")
+# Ejercicio 2: Calculadora simple (completada)
+# Pide al usuario dos números y una operación (+, -, *, /).
+# Realiza la operación y muestra el resultado (maneja la división entre cero).
+op = input("Operación (+ - * /): ")
+if op == "+": print(n1 + n2)
+elif op == "-": print(n1 - n2)
+elif op == "*": print(n1 * n2)
+elif op == "/": print(n1 / n2 if n2 != 0 else "No se puede dividir entre 0")
+else: print("Operación no válida")
+# Ejercicio 3: Año bisiesto (resuelto por Claude)
+# Pide al usuario que introduzca un año y determina si es bisiesto.
+# Un año es bisiesto si es divisible por 4, excepto si es divisible
+# por 100 pero no por 400.
+año = int(input("Año: "))
+if (año % 4 == 0 and año % 100 != 0) or año % 400 == 0: print("Bisiesto")
+else: print("No bisiesto")
+# Ejercicio 4: Categorizar edades (corregido: 0 <= edad)
+# Pide al usuario que introduzca una edad y la clasifique en:
+# Bebé (0-2 años), Niño (3-12), Adolescente (13-17),
+# Adulto (18-64) y Adulto mayor (65 años o más).
+edad = int(input("Edad: "))
+if 0 <= edad <= 2: print("Bebé")
+elif edad <= 12: print("Niño")      # ya sabemos que edad >= 3
+elif edad <= 17: print("Adolescente")
+elif edad <= 64: print("Adulto")
+elif edad >= 65: print("Adulto mayor")
+else: print("Edad no válida")`)}${X('Ej. 4: con <code>0 &lt; edad</code> el 0 daba "Edad no válida". Ej. 2 estaba sin terminar. Ej. 3 resuelto por Claude.')}`],
+[1,'x','Ejercicios while',`${P(R`# Ejercicio 1: Cuenta atrás
+# Imprime los números del 10 al 1 usando un bucle while.
+c = 10
+while c >= 1: print(c); c -= 1
+# Ejercicio 2: Suma de números pares (while)
+# Calcula la suma de los números pares entre 1 y 20 (inclusive)
+# usando un bucle while.
+suma, n = 0, 2
+while n <= 20: suma += n; n += 2
+print(suma)                       # 110
+# Ejercicio 3: Factorial de un número (resuelto por Claude)
+# Pide un número entero positivo y calcula su factorial con un bucle while.
+# El factorial es el producto de todos los números del 1 a ese número.
+# Ejemplo: 5! = 5 x 4 x 3 x 2 x 1 = 120.
+n = int(input("Entero positivo: ")); f = 1
+while n > 1: f *= n; n -= 1
+print(f)
+# Ejercicio 4: Validación de contraseña (corregido)
+# Pide al usuario una contraseña, que debe tener al menos 8 caracteres.
+# Usa un bucle while para seguir pidiéndola hasta que cumpla el requisito.
+# Si la contraseña es válida, imprime 'Contraseña válida'.
+pw = input("Contraseña: ")
+while len(pw) < 8:
+    print("Mínimo 8 caracteres")
+    pw = input("Contraseña: ")
+print("Contraseña válida")        # fuera del bucle
+# Ejercicio 5: Tabla de multiplicar
+# Pide al usuario un número e imprime su tabla de multiplicar
+# (del 1 al 10) usando un bucle while.
+n = int(input("Número: ")); i = 1
+while i <= 10: print(f"{n} x {i} = {n*i}"); i += 1
+# Ejercicio 6: Números primos hasta N (corregido)
+# Pide un número entero positivo N e imprime todos los números primos
+# menores o iguales que N usando un bucle while.
+N = int(input("N: ")); num = 2
+while num <= N:
+    div, primo = 2, True
+    while div * div <= num:
+        if num % div == 0: primo = False; break
+        div += 1
+    if primo: print(num)
+    num += 1`)}${X('Ej. 4: el mensaje de éxito solo salía tras reintentar. Ej. 6: mi condición <code>while primo or ...</code> no terminaba y solo comprobaba un número; el enunciado pide todos los primos hasta N.')}`],
+[1,'x','Ejercicios for y range',`${P(R`# for 1: Imprimir números pares
+# Imprime todos los números pares del 2 al 20 (inclusive) usando un bucle for.
+for n in range(2, 21, 2): print(n)
+# for 2: Calcular la media de una lista
+# Dada la lista numeros = [10, 20, 30, 40, 50], calcula la media
+# de los números usando un bucle for.
+nums = [10, 20, 30, 40, 50]; s = 0
+for n in nums: s += n
+print(s / len(nums))              # 30.0
+# for 3: Buscar el máximo de una lista
+# Dada la lista numeros = [15, 5, 25, 10, 20], encuentra el número máximo
+# usando un bucle for.
+nums = [15, 5, 25, 10, 20]; mayor = nums[0]
+for n in nums:
+    if n > mayor: mayor = n
+print(mayor)                      # 25
+# for 4: Filtrar cadenas por longitud (resuelto por Claude)
+# Dada palabras = ['casa', 'arbol', 'sol', 'elefante', 'luna'], crea una nueva
+# lista solo con las palabras de más de 5 letras, usando un bucle for
+# y list comprehension.
+pal = ["casa", "arbol", "sol", "elefante", "luna"]
+print([p for p in pal if len(p) > 5])   # ['elefante']
+# for 5: Contar palabras que empiezan con una letra (resuelto por Claude)
+# Dada palabras = ['casa', 'arbol', 'sol', 'elefante', 'luna', 'coche'],
+# pide al usuario una letra y cuenta cuántas palabras empiezan con ella
+# (sin diferenciar mayúsculas/minúsculas).
+letra = input("Letra: ").lower()
+print(sum(1 for p in pal if p.lower().startswith(letra)))
+# range 1-5 (resueltos por Claude), todos con un bucle for y range():
+# range 1: Imprime los números del 1 al 10 (inclusive).
+# range 2: Imprime los números impares entre 1 y 20 (inclusive).
+# range 3: Imprime los múltiplos de 5 desde 5 hasta 50 (inclusive).
+# range 4: Imprime los números del 10 al 1 (inclusive) en orden inverso.
+# range 5: Calcula la suma de los números del 1 al 100 (inclusive).
+for i in range(1, 11): print(i)         # 1 al 10
+for i in range(1, 21, 2): print(i)      # impares
+for i in range(5, 51, 5): print(i)      # múltiplos de 5
+for i in range(10, 0, -1): print(i)     # inverso
+print(sum(range(1, 101)))               # 5050
+# range 6: Tabla de multiplicar
+# Pide un número e imprime su tabla de multiplicar (del 1 al 10)
+# usando un bucle for y range().
+n = int(input("Número: "))
+for i in range(1, 11): print(f"{n} x {i} = {n*i}")`)}`],
+[1,'x','Ejercicios de excepciones',`${P(R`# Ejercicio 1: División por cero
+# Código: resultado = 10 / 0
+# Modifica este código para evitar que el programa se bloquee. Usa un bloque
+# try-except para capturar ZeroDivisionError y muestra un mensaje indicando
+# que no se puede dividir por cero.
+try:
+    resultado = 10 / 0
+except ZeroDivisionError:
+    print("¡Error! No se puede dividir un número entre cero")
+# Ejercicio 2: Acceso a índice de lista fuera de rango
+# Código: lista = [1, 2, 3, 4, 5]  y  lista[10]
+# Usa un bloque try-except para capturar IndexError y muestra un mensaje
+# indicando que el índice está fuera del rango de la lista.
+lista = [1, 2, 3, 4, 5]
+try:
+    print(lista[10])
+except IndexError:
+    print("Error: el índice está fuera del rango de la lista")
+# Ejercicio 3: Acceso a clave de diccionario inexistente
+# Código: colores = {'rojo': 'red', 'verde': 'green', 'negro': 'black'}  y  colores['blanco']
+# Usa try-except para manejar el KeyError al acceder a la clave 'blanco'
+# y muestra un mensaje de error apropiado.
+colores = {'rojo': 'red', 'verde': 'green', 'negro': 'black'}
+try:
+    print(colores['blanco'])
+except KeyError:
+    print("Error: la clave 'blanco' no está en el diccionario")
+# Ejercicio 4: Error de tipo de dato (errata corregida)
+# Código: resultado = 15 + '20'
+# Escribe un bloque try-except para manejar el TypeError que ocurre
+# al intentar sumar un entero con una cadena.
+try:
+    resultado = 15 + "20"
+except TypeError:
+    print("Error: no se puede sumar un número con una cadena de texto")
+# Ejercicio 5: Validación de entrada con bucle
+# Crea un bucle while que solicite repetidamente un número. Usa try-except
+# para capturar ValueError si el usuario introduce algo que no es un número.
+# El bucle debe continuar hasta que se introduzca un valor válido.
+while True:
+    try:
+        num = int(input("Número: ")); print("Válido"); break
+    except ValueError: print("No es un número válido")
+# Ejercicio 6: Función que calcula la raíz cuadrada (resuelto por Claude)
+# Escribe una función calcular_raiz_cuadrada que reciba un número. Dentro,
+# usa try-except para manejar dos posibles errores:
+# - ValueError: si se intenta calcular la raíz de un valor no numérico.
+# - ZeroDivisionError: si se intenta calcular la raíz de un número negativo.
+# La función debe imprimir un mensaje de error o el resultado correcto.
+import math
+def calcular_raiz_cuadrada(x):
+    try:
+        print(math.sqrt(float(x)))
+    except ValueError:
+        print("Error: valor no numérico o número negativo")
+calcular_raiz_cuadrada(16)   # 4.0
+calcular_raiz_cuadrada(-4)   # Error`)}${X('El enunciado decía <code>ZeroDivisionError</code> para raíces de negativos, pero <code>math.sqrt(-1)</code> lanza <code>ValueError</code>.')}`],
+[1,'x','Proyectos finales',`${P(R`# 1. Calculadora segura (la mía, no repetida aquí)
+# Pide al usuario dos números y una operación (+, -, *, /). Repite hasta que
+# el usuario quiera salir. Controla la división entre cero y la
+# introducción de valores no numéricos.
+# 2. Contador con control de errores (el mío, no repetido aquí)
+# Pide un número entero positivo n y cuenta desde 1 hasta n. Si el usuario
+# introduce algo que no sea entero o menor que 1, se pide de nuevo. Si se
+# interrumpe con Ctrl + C, el programa se despide limpiamente.
+# 3. Simulador de ahorro mensual (resuelto por Claude)
+# Pide un saldo inicial y una cantidad a ahorrar cada mes. Muestra el saldo
+# mes a mes durante un año. Controla errores de tipo o de entrada no numérica.
+# Extra: si el saldo supera cierto umbral (por ejemplo, 10 000),
+# muestra un mensaje especial ('¡Meta alcanzada!').
+try:
+    saldo = float(input("Saldo inicial: ")); ahorro = float(input("Ahorro/mes: "))
+    for mes in range(1, 13):
+        saldo += ahorro
+        print(f"Mes {mes}: {saldo:.2f}" + (" ¡Meta alcanzada!" if saldo >= 10000 else ""))
+except ValueError: print("Introduce números")
+# 4. Adivina el número, versión con excepciones (resuelto por Claude)
+# El programa genera un número secreto y el usuario intenta adivinarlo
+# introduciendo números. Controla las entradas no numéricas.
+# Requisitos: mensajes 'mayor' o 'menor' según la comparación; cuando acierta,
+# felicita y muestra el número de intentos.
+import random
+secreto, intentos = random.randint(1, 100), 0
+while True:
+    try:
+        n = int(input("Número: ")); intentos += 1
+    except ValueError: print("Debe ser un número"); continue
+    if n < secreto: print("Mayor")
+    elif n > secreto: print("Menor")
+    else: print(f"¡Acertaste en {intentos} intentos!"); break
+# 5. Verificador de operaciones matemáticas (resuelto por Claude)
+# Pide una expresión matemática simple como texto (por ejemplo, '3 + 2').
+# Usa eval() para evaluarla dentro de un try-except. Controla:
+# SyntaxError si la expresión está mal escrita, TypeError si se intenta una
+# operación inválida (3 + 'hola') y ZeroDivisionError si hay división entre 0.
+# Ayuda: eval(expresion) interpreta una cadena como código Python y devuelve
+# el resultado. Ej.: eval('10 * (2 + 3)') da 50.
+try: print(eval(input("Expresión: ")))
+except SyntaxError: print("Expresión mal escrita")
+except TypeError: print("Operación inválida")
+except ZeroDivisionError: print("División entre cero")`)}${X('<code>eval()</code> ejecuta cualquier código: no usarlo con texto de usuarios desconocidos.')}`],
+[2,'e','Funciones',`<p>Una función evita repetir código. Sintaxis: <code>def nombre(parámetros):</code> con docstring y <code>return</code> opcional. <mark>Parámetro</mark> = variable de la definición; <mark>argumento</mark> = valor al llamarla.</p>${P(R`def saludar(): print("¡Hola profe!")
+def saludar_a(nombre): print(f"¡Hola {nombre}!")
+def sumar(a, b):
+    """Suma dos números"""      # docstring
+    return a + b
+def multiplicar(a, b=2): return a * b   # valor por defecto
+print(multiplicar(5), multiplicar(5, 3))   # 10 15
+def describir(nombre: str, edad: int, sexo: str):
+    print(f"Soy {nombre}, tengo {edad} años y soy {sexo}")
+describir("midu", 25, "gato")                   # por posición
+describir(sexo="gato", nombre="midu", edad=25)  # por clave
+def sumar_todo(*args):        # nº variable de argumentos -> tupla
+    return sum(args)
+print(sumar_todo(1, 2, 3, 4)) # 10
+def info(**kwargs):           # clave-valor variables -> diccionario
+    for k, v in kwargs.items(): print(f"{k}: {v}")
+info(nombre="midu", edad=25)`)}${X('En el original se llamaba <code>describir_persona(1, 25, "gato")</code> con tipos incorrectos: las anotaciones no se comprueban, pero los argumentos deben respetarlas.')}`],
+[2,'x','Ejercicios de funciones',`${P(R`# Saludo (resuelto por Claude): escribe una función que muestre por pantalla
+# el saludo ¡Hola profe! cada vez que se la invoque.
+def saludar():
+    print("¡Hola profe!")
+saludar()
+# Saludo con nombre (resuelto por Claude): escribe una función a la que se le pase
+# una cadena <nombre> y muestre por pantalla el saludo ¡hola <nombre>!.
+def saludar_a(nombre):
+    print(f"¡Hola {nombre}!")
+saludar_a("Pablo")
+# 1. Escribe una función que reciba un número entero positivo
+# y devuelva su factorial.
+def factorial(n):
+    tmp = 1
+    for i in range(n): tmp *= i + 1
+    return tmp
+print(factorial(4))                   # 24
+# 2. Escribe una función que calcule el total de una factura tras aplicarle
+# el IVA. Debe recibir la cantidad sin IVA y el porcentaje de IVA a aplicar,
+# y devolver el total. Si se invoca sin pasarle el porcentaje de IVA,
+# deberá aplicar un 21%.
+def mas_iva(importe, iva=21): return importe + importe * iva / 100
+print(mas_iva(150))                   # 181.5
+# 3. Escribe una función que calcule el área de un círculo y otra que calcule
+# el volumen de un cilindro usando la primera función (corregido: math.pi).
+import math
+def area_circulo(r): return math.pi * r ** 2
+def volumen_cilindro(r, h): return area_circulo(r) * h
+print(area_circulo(2), volumen_cilindro(2, 5))
+# 4. Escribe una función que reciba una muestra de números en una lista
+# y devuelva otra lista con sus cuadrados.
+def cuadrados(lista): return [n ** 2 for n in lista]
+print(cuadrados([1, 2, 3, 4]))        # [1, 4, 9, 16]`)}${X('Ej. 3: usaba 3.14; <code>math.pi</code> es más preciso (importaba math y no lo usaba). Los dos saludos, resueltos por Claude, están al principio del bloque.')}`]];
+const C=[['print: sep','Separador entre elementos impresos (por defecto un espacio).'],['print: end','Lo que se imprime al final (por defecto salto de línea).'],['Tipado dinámico','El tipo se decide al ejecutar y puede cambiar al reasignar.'],['Tipado fuerte','Python no convierte tipos automáticamente: 10 + "2" da TypeError.'],['Casting','Convertir un valor a otro tipo: int(), float(), str(), bool().'],['f-string','Cadena con f"..." que inserta expresiones entre llaves.'],['input()','Pide texto al usuario; siempre devuelve str.'],['// y %','División entera y resto.'],['Tipo inmutable','No se modifica en sitio (int, float, str, bool, tuple): reasignar crea otro objeto.'],['Tipo mutable','Se modifica en sitio (list, dict, set); varias variables pueden compartir el objeto.'],['is vs ==','is compara identidad (mismo objeto); == compara valor.'],['elif','Condición alternativa; solo se ejecuta el primer bloque verdadero.'],['Valores falsos','0, "", None y colecciones vacías se evalúan como False.'],['break / continue','break sale del bucle; continue salta a la siguiente iteración.'],['else en bucle','Se ejecuta si el bucle termina sin break.'],['range(a, b, p)','Secuencia desde a hasta b (sin incluir b) con paso p.'],['enumerate()','Itera dando índice y valor.'],['List comprehension','[expr for x in lista if cond]: crea una lista en una línea.'],['try / except','Captura excepciones para que el programa no se detenga.'],['ValueError','Valor inadecuado, p. ej. int("abc") o sqrt(-1).'],['ZeroDivisionError','División entre cero.'],['IndexError / KeyError','Índice de lista o clave de diccionario inexistente.'],['TypeError','Operación entre tipos incompatibles.'],['Parámetro vs argumento','Parámetro: en la definición. Argumento: valor en la llamada.'],['*args / **kwargs','Argumentos posicionales variables (tupla) / clave-valor variables (diccionario).'],['return','Devuelve un valor y termina la función.']];
+const Q=[
+['¿Qué imprime <code>print(8 // 3, 8 % 3)</code>?',['2 2','2.67 2','3 2','2 1'],0,'// es división entera (2) y % el resto (2).'],
+['¿Qué imprime <code>print(bool("False"))</code>?',['False','True','Error','None'],1,'Cualquier cadena no vacía es True.'],
+['¿Qué tipo devuelve siempre input()?',['int','float','str','Depende de lo escrito'],2,'Hay que convertirlo con int() o float().'],
+['<code>print(int(3.99))</code> imprime…',['4','3','3.99','Error'],1,'int() trunca, no redondea.'],
+['<code>x = 10; y = x; y = 9; print(x)</code> imprime…',['9','10','Error','None'],1,'Los enteros son inmutables: reasignar y no cambia x.'],
+['<code>a = [1]; b = a; b.append(2); print(a)</code> imprime…',['[1]','[2]','[1, 2]','Error'],2,'a y b apuntan a la misma lista mutable.'],
+['Python es de tipado…',['Estático y débil','Dinámico y fuerte','Dinámico y débil','Estático y fuerte'],1,'El tipo cambia al reasignar, pero no hay conversiones implícitas.'],
+['¿Qué imprime <code>for i in range(2, 10, 3): print(i)</code>?',['2 5 8','2 5 8 10','3 6 9','2 4 6 8'],0,'El fin (10) no se incluye.'],
+['¿Cuántas veces imprime <code>while c &lt;= 5</code> con c empezando en 0 y c += 1?',['5','6','7','Infinitas'],1,'Imprime 0, 1, 2, 3, 4 y 5.'],
+['¿Cuándo se ejecuta el <code>else</code> de un bucle?',['Siempre','Si el bucle termina sin break','Si hay un break','Si la condición es falsa al inicio solo'],1,'Con break no se ejecuta.'],
+['¿Qué imprime <code>for i in range(5): if i % 2: continue; print(i)</code>?',['1 3','0 2 4','0 1 2 3 4','2 4'],1,'continue salta los impares.'],
+['¿Qué excepción da <code>[1, 2, 3][10]</code>?',['KeyError','ValueError','IndexError','TypeError'],2,'Índice fuera de rango.'],
+['¿Qué excepción da <code>int("hola")</code>?',['TypeError','ValueError','SyntaxError','NameError'],1,'El tipo es correcto (str) pero el valor no es convertible.'],
+['¿Qué excepción lanza <code>math.sqrt(-1)</code>?',['ZeroDivisionError','ValueError','TypeError','OverflowError'],1,'Es un ValueError (math domain error).'],
+['¿Cuál es bisiesto?',['1900','2100','2000','2023'],2,'Divisible por 400 (aunque también por 100).'],
+['<code>def f(a, b=2): return a*b</code>. ¿Qué devuelve <code>f(5)</code>?',['5','10','Error','7'],1,'b toma el valor por defecto 2.'],
+['¿Qué es args en <code>def f(*args)</code>?',['Una lista fija','Una tupla con los argumentos posicionales','Un diccionario','Un entero'],1,'**kwargs es el diccionario.'],
+['¿Qué devuelve una función sin return?',['0','"" ','None','Error'],2,'Por defecto devuelve None.'],
+['Verdadero o falso: <code>"Hola" == "hola"</code> es True.',['Verdadero','Falso'],1,'Distingue mayúsculas y minúsculas.'],
+['¿Qué imprime <code>print("a" if 3 > 5 else "b")</code>?',['a','b','Error','None'],1,'3 > 5 es falso: se evalúa la parte del else.']];
+let S={done:{},known:{},wrong:{}};try{Object.assign(S,JSON.parse(localStorage.getItem('py_ex1')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('py_ex1',JSON.stringify(S))}catch(e){}};
+let V='th',F='all',UT=0,FP=false,FI=0,FL=false,tm=null;
+const VS=[['th','Teoría'],['fc','Flashcards'],['ts','Test'],['ex','Examen'],['rv','Repaso'],['gl','Glosario'],['ch','Chuleta']];
+function prog(){const n=3+C.length,k=U.filter((_,i)=>S.done[i]).length+C.filter((_,j)=>S.known['c'+j]===1).length,p=Math.round(100*k/n);$('#pg').style.width=p+'%';$('#pt').textContent=p+' % completado · '+Object.keys(S.wrong).length+' preguntas por repasar'}
+function nav(){$('#nv').innerHTML=VS.map(v=>`<button class="${V===v[0]?'on':''}" onclick="V='${v[0]}';clearInterval(tm);R()">${v[1]}</button>`).join('');prog()}
+function render(){nav();const m=$('#m');m.innerHTML='';({th,fc,ts,ex,rv,gl,ch})[V](m);window.scrollTo(0,0)}
+function setUT(v){UT=v==='all'?'all':+v;R()}
+function th(m){m.innerHTML='<div class="row" style="margin-bottom:8px">'+[[0,'UT1'],[1,'UT2'],[2,'UT3'],['all','Todas']].map(t=>`<button class="${UT===t[0]?'on':''}" onclick="setUT('${t[0]}')">${t[1]}</button>`).join('')+'</div><div class="row">'+[['all','Todo'],['e','Ejemplos'],['x','Ejercicios']].map(f=>`<button class="${F===f[0]?'on':''}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')+'</div>'+U.map((u,i)=>UT!=='all'&&UT!==i?'':`<h2>${u}</h2>`+TH.filter(t=>t[0]===i&&(F==='all'||t[1]===F)).map(t=>`<details><summary><span class="b ${t[1]}">${t[1]==='e'?'Ejemplo':'Ejercicio'}</span>${t[2]}</summary><div>${t[3]}</div></details>`).join('')+`<button onclick="S.done[${i}]=!S.done[${i}];save();R()">${S.done[i]?'✓ Unidad completada (quitar)':'Marcar unidad como completada'}</button>`).join('')}
+function fc(m){const L=C.map((c,j)=>({k:'c'+j,q:c[0],a:c[1]})).filter(c=>!FP||S.known[c.k]!==1);if(FI>=L.length)FI=0;m.innerHTML=`<label><input type="checkbox" ${FP?'checked':''} onchange="FP=this.checked;FI=0;R()"> Solo pendientes</label>`;if(!L.length){m.innerHTML+='<div class="card">🎉 ¡Todas dominadas!</div>';return}const c=L[FI];m.innerHTML+=`<p class="tag">${FI+1}/${L.length}</p><div class="card fc ${FL?'back':''}" tabindex="0" role="button" onclick="FL=!FL;R()" onkeydown="if(event.key==' '||event.key=='Enter'){event.preventDefault();FL=!FL;R()}">${FL?c.a:'<b>'+c.q+'</b>'}</div><div class="row"><button onclick="mk('${c.k}',1)">✓ La sabía</button><button onclick="mk('${c.k}',0)">↻ Repasar</button></div><p class="tag">Pulsa la tarjeta (o Enter) para voltearla.</p>`}
+function mk(k,v){S.known[k]=v;save();FI++;FL=false;R()}
+const qs=()=>Q.map((q,j)=>({k:'q'+j,q}));
+function ts(m){m.innerHTML=`<div class="card"><p>${Q.length} preguntas con feedback inmediato (incluye «¿qué imprime?»).</p><button class="on" onclick="quiz(sh(qs()),true)">Empezar test</button></div>`}
+function ex(m){m.innerHTML=`<div class="card"><p>Examen aleatorio sin feedback hasta el final.</p><label>Nº de preguntas: <input type="number" id="en" value="10" min="3" max="${Q.length}" style="width:80px"></label> <label><input type="checkbox" id="ec" checked> Cronómetro</label><p><button class="on" onclick="quiz(sh(qs()).slice(0,+$('#en').value||10),false,$('#ec').checked)">Empezar examen</button></p></div>`}
+function quiz(L,fb,clock){const m=$('#m');let i=0,res=[],t0=Date.now();clearInterval(tm);
+if(clock)tm=setInterval(()=>{const e=$('#tc');if(e){const s=Math.floor((Date.now()-t0)/1000);e.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}},500);
+function rec(it,ok){res.push({it,ok});if(!ok)S.wrong[it.k]=2;else if(S.wrong[it.k]&&!--S.wrong[it.k])delete S.wrong[it.k];save();prog()}
+const nxt=()=>{i++;i<L.length?show():end()};
+function show(){const it=L[i],q=it.q;m.innerHTML=`<p class="tag">Pregunta ${i+1}/${L.length}${clock?' · ⏱ <span id="tc"></span>':''}</p><div class="card"><b>${q[0]}</b>`+q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')+'<div id="fb"></div></div>';
+m.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const j=+b.dataset.j,ok=j===q[2];rec(it,ok);if(!fb)return nxt();m.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(+x.dataset.j===q[2])x.classList.add('ok')});if(!ok)b.classList.add('ko');$('#fb').innerHTML=`<div class="fb ${ok?'ok':'ko'}"><b>${ok?'¡Correcto!':'Incorrecto.'}</b> ${q[3]}</div><p><button class="on" id="nx">Siguiente →</button></p>`;$('#nx').onclick=nxt;$('#nx').focus()})}
+function end(){clearInterval(tm);const ok=res.filter(r=>r.ok).length;m.innerHTML=`<div class="card"><div class="big">${(10*ok/res.length).toFixed(1)} / 10</div><p>${ok} de ${res.length} aciertos${clock?' · '+Math.round((Date.now()-t0)/1000)+' s':''}.</p></div>`+(res.some(r=>!r.ok)?'<h3>Para repasar</h3>'+res.filter(r=>!r.ok).map(r=>`<div class="card"><b>${r.it.q[0]}</b><p>✓ ${r.it.q[1][r.it.q[2]]}</p><p class="tag">${r.it.q[3]}</p></div>`).join(''):'<p>🎉 Sin fallos.</p>')}
+show()}
+function rv(m){const w=qs().filter(x=>S.wrong[x.k]),pc=C.map((c,j)=>({k:'c'+j,q:c[0],a:c[1]})).filter(c=>S.known[c.k]===0);
+m.innerHTML=`<h3>Preguntas falladas (${w.length})</h3>`+(w.length?`<button class="on" onclick="quiz(sh(qs().filter(x=>S.wrong[x.k])),true)">Practicar fallos</button>`+w.map(x=>`<div class="card">${x.q[0]}</div>`).join(''):'<p>Ninguna. Se eliminan al acertarlas dos veces.</p>')+`<h3>Flashcards por repasar (${pc.length})</h3>`+pc.map(c=>`<details><summary>${c.q}</summary><div>${c.a}</div></details>`).join('')}
+function gl(m){m.innerHTML='<input type="search" id="gq" placeholder="Buscar término…" aria-label="Buscar en el glosario"><div id="gr"></div>';const f=()=>{const q=$('#gq').value.toLowerCase();$('#gr').innerHTML=C.filter(c=>(c[0]+c[1]).toLowerCase().includes(q)).map(c=>`<div class="card"><b>${esc(c[0])}</b><br>${esc(c[1])}</div>`).join('')};$('#gq').oninput=f;f()}
+function ch(m){m.innerHTML='<div class="card"><h3>UT1</h3><ul><li><code>print(sep, end)</code>; <code>type()</code>; casting <code>int() float() str() bool()</code>.</li><li><code>input()</code> → str. <code>//</code> entera, <code>%</code> resto, <code>**</code> potencia.</li><li>Tipado dinámico y fuerte. Inmutables (int, str) vs mutables (list).</li></ul></div><div class="card"><h3>UT2</h3><ul><li><code>if/elif/else</code>, <code>and or not</code>, ternaria.</li><li><code>while</code>: cuidado con el bucle infinito. <code>break</code>, <code>continue</code>, <code>else</code>.</li><li><code>range(ini, fin, paso)</code>: fin excluido. <code>enumerate</code>, list comprehension.</li><li><code>try/except</code>: ValueError, ZeroDivisionError, IndexError, KeyError, TypeError.</li></ul></div><div class="card"><h3>UT3</h3><ul><li><code>def</code>, parámetros, <code>return</code> (sin return → None), docstring.</li><li>Valor por defecto, posicionales vs nombrados, <code>*args</code> (tupla), <code>**kwargs</code> (dict).</li></ul></div>'}
+const root=document.documentElement;
+try{if(localStorage.getItem('py_theme')==='dark')root.dataset.theme='dark'}catch(e){}
+$('#th').onclick=()=>{const d=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=d;try{localStorage.setItem('py_theme',d)}catch(e){}};
+$('#rs').onclick=()=>{if(confirm('¿Borrar todo el progreso?')){S={done:{},known:{},wrong:{}};save();R()}};
+R();
+</script></body></html>
